@@ -1,0 +1,10 @@
+docker build --tag mariadb .
+
+docker create -ti --name mariadb mariadb
+docker start -i mariadb 
+
+#안에서
+
+apt update
+apt install -y mariadb-server
+service mariadb start
