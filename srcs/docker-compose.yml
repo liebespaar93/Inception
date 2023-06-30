@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  nginx:
+    build: ./requirements/nginx/.
+    image: nignx:42
+    container_name: nginx
+    ports:
+      - "433:433"
+
+
+  # wordpress:
+  #   depends_on:
+  #     - maria-db
+  #   build: ./srcs/requirements/wordpress/.
+
+  # maria-db:
+  #   build: ./srcs/requirements/mariadb/.
+  
+volumes:
+  wordpress:
+    name: "wordpress"
+  db-data:
+    name: "db-data"
+
+
+# networks:
+#   front-tier:
+#   back-tier:

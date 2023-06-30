@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
-FROM debian AS nginx
+FROM debian:bookworm-slim AS nginx
 
-WORKDIR /conf
+# WORKDIR /conf
 
-COPY --from=builder / ./conf
+# COPY --from=builder / ./conf
