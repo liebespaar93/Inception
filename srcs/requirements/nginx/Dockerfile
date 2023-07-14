@@ -13,13 +13,18 @@ RUN set -aux \
 
 RUN set -eux \
 	&& apt-get update \
-	&& apt-get install -y nginx=1.22.*;
+	&& apt-get install -y nginx=1.22.* \
+    && ln -sf /dev/stdout /var/log/nginx/access.log \
+    && ln -sf /dev/stderr /var/log/nginx/error.log;
 	# && update-rc.d -f nginx disable;
 
 COPY ./conf/default /etc/nginx/sites-available/default
 COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+COPY ./tools/. /tools/.
 EXPOSE 443
 
-STOPSIGNAL SIGQUIT
+RUN chmod +x /tools/entrypoint.sh
+
+ENTRYPOINT [ "/tools/entrypoint.sh" ]
 
 CMD ["nginx", "-g", "daemon off;"]

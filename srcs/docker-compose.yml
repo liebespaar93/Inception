@@ -1,13 +1,17 @@
 version: "3.9"
+
+networks:
+  network1:
+    name: test-net
+    external: true 
+
 services:
   nginx:
     build: ./requirements/nginx/.
     image:  nginx:42
     container_name: nginx
     ports:
-      - "433:433"
-    env_file:
-      - .env
+      - 443:443
 
   # wordpress:
   #   depends_on:
@@ -23,7 +27,8 @@ services:
 #   db-data:
 #     name: "db-data"
 
-
 # networks:
 #   nginx-net:
+#     name: nginx-net
+#     driver: host
 #   db-net:
