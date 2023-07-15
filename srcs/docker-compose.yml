@@ -1,34 +1,47 @@
 version: "3.9"
 
-networks:
-  network1:
-    name: test-net
-    external: true 
-
 services:
-  nginx:
-    build: ./requirements/nginx/.
-    image:  nginx:42
-    container_name: nginx
-    ports:
-      - 443:443
+  # nginx:
+  #   build: ./requirements/nginx/.
+  #   image: nginx:42
+  #   container_name: nginx
+  #   ports:
+  #     - 443:443
+  #   env_file:
+  #     - .env
 
   # wordpress:
   #   depends_on:
   #     - maria-db
   #   build: ./srcs/requirements/wordpress/.;
 
-  # maria-db:
-  #   build: ./srcs/requirements/mariadb/.
-  
-# volumes:
-#   wordpress:
-#     name: "wordpress"
-#   db-data:
-#     name: "db-data"
+  mariadb:
+    build: ./requirements/mariadb/.
+    image: mariadb:42
+    container_name: mariadb
+    networks:
+     - db-net
+    volumes:
+      - db:/var/lib/mysql
+    env_file:
+      - .env
 
-# networks:
-#   nginx-net:
-#     name: nginx-net
-#     driver: host
-#   db-net:
+  
+volumes:
+  wordpress:
+    name: wordpress
+  db:
+    name: db
+    driver: local
+    driver_opts:
+      device: ./requirements/mariadb/conf/db
+      o: bind
+      type: none
+
+networks:
+  nginx-net:
+    name: nginx-net
+    driver: bridge
+  db-net:
+    name: db-net
+    driver: bridge

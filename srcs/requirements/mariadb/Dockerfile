@@ -1,20 +1,24 @@
 # syntax=docker/dockerfile:1
 
-FROM debian:bookworm-slim AS mariadb
+FROM debian:bookworm-slim as mariadb-kyoulee
 
-RUN set -eux; \
-	apt-get update; \
-	apt-get install -y --no-install-recommends \
-		gosu \
-		mariadb-server \
+RUN set -eux \
+	&& apt-get update \
+	&& apt-get install -y --no-install-recommends gosu;
+
+RUN set -eux \
+	&& apt-get update \
+	&& apt-get install -y --no-install-recommends mariadb-server;
 
 VOLUME /var/lib/mysql
 
-COPY healthcheck.sh /usr/local/bin/healthcheck.sh
-COPY docker-entrypoint.sh /usr/local/bin/
-ENTRYPOINT ["docker-entrypoint.sh"]
+COPY ./tools/. /tools/.
+COPY ./conf/. /conf/.
 
 EXPOSE 3306
-CMD ["mariadbd"]
 
-#service mariadb start
+RUN chmod +x /tools/entrypoint.sh
+ENTRYPOINT [ "/tools/entrypoint.sh" ]
+# CMD ["tail", "-f", "/dev/null"]
+
+CMD ["mariadb"]
