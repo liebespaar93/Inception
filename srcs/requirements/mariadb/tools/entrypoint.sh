@@ -234,7 +234,7 @@ ft_set_database() {
 	mysql_ready "create database $MYSQL_DATABASE"
 
 	ft_sql_exec_client <<-EOSQL
-	set password for 'root'@'localhost' = PASSWORD('$MYSQL_ROOT_PASSWORD')
+	set password for 'root'@'localhost' = PASSWORD('$MYSQL_ROOT_PASSWORD');
 	flush privileges;
 	EOSQL
 	mysql_ready "'root'@'localhost' user change password $MYSQL_ROOT_PASSWORD"

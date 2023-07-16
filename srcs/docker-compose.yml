@@ -1,42 +1,54 @@
 version: "3.9"
 
 services:
-  # nginx:
-  #   build: ./requirements/nginx/.
-  #   image: nginx:42
-  #   container_name: nginx
-  #   ports:
-  #     - 443:443
-  #   env_file:
-  #     - .env
-  #   depends_on:
-  #     - mariadb
+  mariadb:
+    build: ./requirements/mariadb/.
+    image: mariadb:42
+    container_name: mariadb
+    networks:
+     - db-net
+    volumes:
+      - db-v:/var/lib/mysql
+    env_file:
+      - .env
 
-  # wordpress:
-  #   depends_on:
-  #     - maria-db
-  #   build: ./srcs/requirements/wordpress/.;
+  wordpress:
+    build: ./requirements/wordpress/.
+    image: wordpress:42
+    container_name: wordpress
+    env_file:
+      - .env
+    depends_on:
+      - mariadb
 
-  # mariadb:
-  #   build: ./requirements/mariadb/.
-  #   image: mariadb:42
-  #   container_name: mariadb
-  #   networks:
-  #    - db-net
-  #   volumes:
-  #     - db:/var/lib/mysql
-  #   env_file:
-  #     - .env
+  nginx:
+    build: ./requirements/nginx/.
+    image: nginx:42
+    container_name: nginx
+    ports:
+      - 443:443
+    env_file:
+      - .env
+    depends_on:
+      - mariadb
+      - wordpress
+
 
   
 volumes:
-  wordpress:
-    name: wordpress
-  db:
-    name: db
+  wordpress-v:
+    name: wordpress-v
     driver: local
     driver_opts:
-      device: ./requirements/mariadb/conf/db
+      device: ./requirements/wordpress/volume
+      o: bind
+      type: none
+
+  db-v:
+    name: db-v
+    driver: local
+    driver_opts:
+      device: ./requirements/mariadb/volume
       o: bind
       type: none
 
