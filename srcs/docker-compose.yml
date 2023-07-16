@@ -9,22 +9,24 @@ services:
   #     - 443:443
   #   env_file:
   #     - .env
+  #   depends_on:
+  #     - mariadb
 
   # wordpress:
   #   depends_on:
   #     - maria-db
   #   build: ./srcs/requirements/wordpress/.;
 
-  mariadb:
-    build: ./requirements/mariadb/.
-    image: mariadb:42
-    container_name: mariadb
-    networks:
-     - db-net
-    volumes:
-      - db:/var/lib/mysql
-    env_file:
-      - .env
+  # mariadb:
+  #   build: ./requirements/mariadb/.
+  #   image: mariadb:42
+  #   container_name: mariadb
+  #   networks:
+  #    - db-net
+  #   volumes:
+  #     - db:/var/lib/mysql
+  #   env_file:
+  #     - .env
 
   
 volumes:

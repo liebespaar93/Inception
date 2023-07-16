@@ -19,6 +19,5 @@ EXPOSE 3306
 
 RUN chmod +x /tools/entrypoint.sh
 ENTRYPOINT [ "/tools/entrypoint.sh" ]
-# CMD ["tail", "-f", "/dev/null"]
 
-CMD ["mariadb"]
+CMD ["gosu", "mysql", "mysqld_safe"]

@@ -77,11 +77,6 @@ ft_on_mariadb()
 	cp /conf/mysql.cnf /etc/mysql/conf.d/mysql.cnf 
 	mysql_ready "/conf/mysql.cnf -> /etc/mysql/conf.d/mysql.cnf"
 
-	mysql_note "Starting MariaDB database server: mariadb"
-	service mariadb start > /dev/null
-	mysql_ready "mariadb service ON"
-
-
 }
 
 ######
@@ -173,18 +168,35 @@ ft_verify_minimum_env() {
 ######
 
 ft_sql_exec_client() {
-	gosu mysql mariadb --protocol=socket -hlocalhost --socket="${SOCKET}" "$@"
+	mariadb --protocol=socket -uroot -hlocalhost --socket="${SOCKET}" "$@"
+}
+
+docker_process_sql() {
+	if [ '--dont-use-mysql-root-password' = "$1" ]; then
+		shift
+		MYSQL_PWD='' ft_sql_exec_client "$@"
+	else
+		MYSQL_PWD=$MARIADB_ROOT_PASSWORD ft_sql_exec_client "$@"
+	fi
 }
 
 ft_temp_server_start() {
- 	gosu mysql mariadb  & declare -g MARIADB_PID 
+	# mysql_note "Starting MariaDB database server: mariadb"
+	# service mariadb start > /dev/null
+ 	mysqld_safe --skip-networking --default-time-zone=SYSTEM --socket="${SOCKET}" --wsrep_on=OFF --expire-logs-days=0 \
+		--loose-innodb_buffer_pool_load_at_startup=0 \
+		& declare -g MARIADB_PID 
 	MARIADB_PID=$!
 	mysql_ready "[PID $MARIADB_PID] temp server Ready"
 	mysql_note "Waiting for server startup"
+	extraArgs=()
+	if [ -z "$DATABASE_ALREADY_EXISTS" ]; then
+		extraArgs+=( '--dont-use-mysql-root-password' )
+	fi
 	local i
 	for i in {30..0}; do
-		mysql_note "try... connect..." 
-		if ft_sql_exec_client --database=mysql <<<'SELECT 1' &> /dev/null; then
+		mysql_note "wait mysqld_safe connect.."
+		if docker_process_sql "${extraArgs[@]}" --database=mysql <<<'SELECT 1' &> /dev/null; then
 			break
 		fi
 		sleep 1
@@ -192,11 +204,13 @@ ft_temp_server_start() {
 	if [ "$i" = 0 ]; then
 		mysql_error "Unable to start server."
 	fi
+
 	mysql_ready "[PID $MARIADB_PID] temp server Done Connect"
 }
 
 ft_temp_server_stop() {
-	kill "$MARIADB_PID" 2> /dev/null 1> /dev/null
+	killall -15 mariadbd
+	kill "$MARIADB_PID"
 	wait "$MARIADB_PID"
 	mysql_destory "[PID] temp server Clear"
 }
@@ -206,27 +220,24 @@ ft_temp_server_stop() {
 # set up data-base
 ######
 ft_set_database() {
+
 	mysql_note "docker_setup_db"
-	ft_sql_exec_client <<-EOSQL
+	docker_process_sql <<-EOSQL
 	CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';
 	GRANT ALL PRIVILEGES ON  *.* TO '$MYSQL_USER'@'%' WITH GRANT OPTION;
 	EOSQL
 	mysql_ready "'$MYSQL_USER'@'%' user Created $MYSQL_PASSWORD"
 
-	ft_sql_exec_client <<-EOSQL
+	docker_process_sql <<-EOSQL
 	CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;
 	EOSQL
 	mysql_ready "create database $MYSQL_DATABASE"
 
-
 	ft_sql_exec_client <<-EOSQL
-	CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';
-	GRANT ALL PRIVILEGES ON  *.* TO 'root'@'%' WITH GRANT OPTION;
-	ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';
+	set password for 'root'@'localhost' = PASSWORD('$MYSQL_ROOT_PASSWORD')
 	flush privileges;
 	EOSQL
 	mysql_ready "'root'@'localhost' user change password $MYSQL_ROOT_PASSWORD"
-
 }
 _main()
 {
