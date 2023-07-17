@@ -161,5 +161,6 @@ docker-compose_up_nodaemonize :  $(VOLUME_MARIADB) $(VOLUME_WORDPRESS) $(DOCKER_
 		fi; \
 	else echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not root"; \
 	fi;
+	docker rm $(docker ps -a -q);
 
 	
