@@ -8,7 +8,7 @@ RUN set -eux \
 	&& apt install -y --no-install-recommends openssl \
 	&& openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \
 		-out /etc/ssl/certs/kyoulee.crt  -keyout /etc/ssl/private/kyoulee.key \
-		-subj "/C=KR/ST=GangNam/L=Seoul/O=42Seoul/OU=Cadet/CN=kyoulee.kr";
+		-subj "/C=KR/ST=GangNam/L=Seoul/O=42Seoul/OU=Cadet/CN=kyoulee.42.kr";
 
 
 RUN set -eux \

@@ -28,31 +28,41 @@ then
 	USER=kyoulee
 fi
 
-if ! [ -d /etc/nginx ]
-then
-	nginx_error "nginx is fail"
-	return 1
-fi
-nginx_service "[SERVICE] nginx is on"
-nginx_note "Welcome $USER"
-nginx_note "[$HOSTNAME] is all ready nginx"
+ft_nginx_set()
+{
+	if ! [ -d /etc/nginx ]
+	then
+		nginx_error "nginx is fail"
+		return 1
+	fi
+	nginx_service "[SERVICE] nginx is on"
+	nginx_note "Welcome $USER"
+	nginx_note "[$HOSTNAME] is all ready nginx"
 
-if ! [ -f /etc/ssl/certs/kyoulee.crt ]
-then
-	nginx_error "[SSL] SSL CRT is fail"
-	return 2
-fi
-nginx_ready "[SERVICE] SSL CRT is READY"
-nginx_note /etc/ssl/certs/kyoulee.crt
+	if ! [ -f /etc/ssl/certs/kyoulee.crt ]
+	then
+		nginx_error "[SSL] SSL CRT is fail"
+		return 2
+	fi
+	nginx_ready "[SERVICE] SSL CRT is READY"
+	nginx_note /etc/ssl/certs/kyoulee.crt
 
-if ! [ -f /etc/ssl/private/kyoulee.key ]
-then
-	nginx_error "[SSL] SSL key is fail"
-	return 2
-fi
-nginx_ready "[SERVICE] SSL KEY is READY"
-nginx_note "/etc/ssl/private/kyoulee.key"
+	if ! [ -f /etc/ssl/private/kyoulee.key ]
+	then
+		nginx_error "[SSL] SSL key is fail"
+		return 2
+	fi
+	nginx_ready "[SERVICE] SSL KEY is READY"
+	nginx_note "/etc/ssl/private/kyoulee.key"
 
-nginx_service "SSL on"
+	nginx_service "SSL on"
+}
+
+_main()
+{
+	ft_nginx_set
+}
+
+_main
 
 exec "$@"

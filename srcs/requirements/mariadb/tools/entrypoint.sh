@@ -23,7 +23,7 @@ mysql_ready() {
 	mysql_log READY "082" "$@"
 }
 mysql_destory() {
-	mysql_log DESTROY "089" "$@"
+	mysql_log DESTROY "160" "$@"
 }
 mysql_env() {
 	mysql_log ENV "045" "$@"

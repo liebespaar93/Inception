@@ -5,10 +5,11 @@ services:
     build: ./requirements/mariadb/.
     image: mariadb:42
     container_name: mariadb
+    hostname: mariadb
     networks:
-     - db-net
+      - net
     volumes:
-      - db-v:/var/lib/mysql
+      - v-db:/var/lib/mysql
     env_file:
       - .env
 
@@ -16,8 +17,13 @@ services:
     build: ./requirements/wordpress/.
     image: wordpress:42
     container_name: wordpress
+    hostname: wordpress
     env_file:
       - .env
+    networks:
+      - net
+    volumes:
+      - v-wordpress:/var/www/html
     depends_on:
       - mariadb
 
@@ -25,10 +31,15 @@ services:
     build: ./requirements/nginx/.
     image: nginx:42
     container_name: nginx
+    hostname: nginx
     ports:
       - 443:443
     env_file:
       - .env
+    networks:
+      - net
+    volumes:
+      - v-wordpress:/var/www/html
     depends_on:
       - mariadb
       - wordpress
@@ -36,16 +47,16 @@ services:
 
   
 volumes:
-  wordpress-v:
-    name: wordpress-v
+  v-wordpress:
+    name: v-wordpress
     driver: local
     driver_opts:
       device: ./requirements/wordpress/volume
       o: bind
       type: none
 
-  db-v:
-    name: db-v
+  v-db:
+    name: v-db
     driver: local
     driver_opts:
       device: ./requirements/mariadb/volume
@@ -53,9 +64,6 @@ volumes:
       type: none
 
 networks:
-  nginx-net:
-    name: nginx-net
-    driver: bridge
-  db-net:
-    name: db-net
+  net:
+    name: net
     driver: bridge
