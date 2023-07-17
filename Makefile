@@ -17,8 +17,11 @@ $(docker_apt_checker):
 	sudo apt-get update;
 	sudo apt-get install -y ca-certificates curl gnupg;
 	sudo install -m 0755 -d /etc/apt/keyrings;
+	@echo "\033[38;5;047m[docker_apt_checker]\033[0m:  curl a+r start ";
 	curl -4fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg;
+	@echo "\033[38;5;047m[docker_apt_checker]\033[0m:  chmod a+r start ";
 	sudo chmod a+r /etc/apt/keyrings/docker.gpg;
+	@echo "\033[38;5;047m[docker_apt_checker]\033[0m:  sudo tee  strat ";
 	echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian   "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null;
 	touch $(docker_apt_checker);
 
