@@ -73,7 +73,7 @@ docker-compose_install : set_docker_apt $(DOCKER_COMPOSE_INSTALL_CHECKER)
 $(DOCKER_COMPOSE_RUN):
 	@if [ $(WHOAMI) = root ]; \
 	then \
-		docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml up;\
+		docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml up -d; \
 	else echo "\033[38;5;048m[docker-compose_up]\033[0m: $(WHOAMI) is not root"; \
 	fi; \
 	touch $(DOCKER_COMPOSE_RUN);
