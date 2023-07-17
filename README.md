@@ -1,6 +1,6 @@
 # Inception
 # 주의!!  debian bullseye 기준입니다
-# 1. Ssh port 설정  [Port 22 경우 skip]
+# 1. Ssh port 설정  [ Port 22 경우 skip ]
 echo "Port 22" > /etc/ssh/sshd_config.d/cluster.conf
 service ssh restart
 su 

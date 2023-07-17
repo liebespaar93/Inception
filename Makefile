@@ -69,7 +69,7 @@ unset_docker :
 	for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do apt-get remove $pkg; done;
 
 docker-compose_install : set_docker_apt $(DOCKER_COMPOSE_INSTALL_CHECKER)
-	@echo "\033[38;5;047m[docker-compose_install\033[0m: docker-compose install"
+	@echo "\033[38;5;047m[docker-compose_install]\033[0m: docker-compose install"
 
 $(DOCKER_42_IMAGE):
 	touch $(DOCKER_42_IMAGE);
@@ -156,7 +156,7 @@ docker-compose_up_nodaemonize :  $(VOLUME_MARIADB) $(VOLUME_WORDPRESS) $(DOCKER_
 		if ! [ -f $(DOCKER_COMPOSE_RUN) ]; \
 		then \
 			echo "\033[38;5;048m[docker-compose_up_nodaemonize]\033[0m: docker-compose start running"; \
-			docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml up \
+			docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml up; \
 		else echo "\033[38;5;202m[docker-compose_up_nodaemonize]\033[0m: docker-compose is all ready running"; \
 		fi; \
 	else echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not root"; \
