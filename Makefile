@@ -30,10 +30,7 @@ set_docker_apt : $(docker_apt_checker) set_resolv
 	sudo install -m 0755 -d /etc/apt/keyrings
 	curl -4fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 	sudo chmod a+r /etc/apt/keyrings/docker.gpg
-	echo \
-  	"deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
-  	"$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
-  	sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+	echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian   "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 	sudo apt-get update
 
 docker_install : $(docker_install_checker) set_docker_apt
