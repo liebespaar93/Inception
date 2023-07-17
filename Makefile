@@ -39,11 +39,11 @@ unset_reslov :
 	@if [ -f ./$(nameserver) ]; then rm $(nameserver); fi
 	$(shell (sed '/nameserver 8.8.8.8/d' /etc/resolv.conf) | cat > temp; cp temp /etc/resolv.conf ; rm temp)
 
-set_docker_apt : $(docker_apt_checker) set_resolv 
+set_docker_apt : set_resolv  $(docker_apt_checker)
 	@echo "\033[38;5;047m[docker_apt]\033[0m: set_docker_apt setting"
 	
 
-docker_install : $(docker_install_checker) set_docker_apt docker-compose
+docker_install : set_docker_apt docker-compose $(docker_install_checker) 
 	@echo "\033[38;5;047m[docker_install]\033[0m: docker_install install"
 
 unset_docker :
@@ -53,5 +53,5 @@ unset_docker :
 	@if [ -f ./$(docker_compose_install_checker) ]; then rm $(docker_compose_install_checker); fi; \
 	for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do apt-get remove $pkg; done;
 
-docker-compose : $(docker_compose_install_checker) set_docker_apt
+docker-compose : set_docker_apt $(docker_compose_install_checker)
 	@echo "\033[38;5;196m[docker-compose]\033[0m: docker-compose install"
