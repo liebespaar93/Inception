@@ -92,10 +92,11 @@ docker-compose_up : $(VOLUME_MARIADB) $(VOLUME_WORDPRESS) $(DOCKER_COMPOSE_RUN)
 docker-compose_down : 
 	@if [ $(WHOAMI)= root ]; \
 	then \
-		if [ -f $(DOCKER_COMPOSE_RUN) ] \
+		if [ -f $(DOCKER_COMPOSE_RUN) ]; \
 		then \
 			docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml down; \
-		fi; \
+		else echo "\033[38;5;160m[docker-compose_down]\033[0m: docker-compose is not running"; \
+		fi \
 		echo "\033[38;5;226m[docker-compose_down]\033[0m: docker-compose down"; \
 	else echo "\033[38;5;160m[docker-compose_down]\033[0m: $(WHOAMI) is not root"; \
 	fi
@@ -119,11 +120,11 @@ docker-compose_clean : docker-compose_down
 docker-compose_fclean : docker-compose_clean
 	@if [ $(WHOAMI) = root ]; \
 	then \
-		if [ -d $(VOLUME_MARIADB) ] \
+		if [ -d $(VOLUME_MARIADB) ]; \
 		then \
 			rm -rf $(VOLUME_MARIADB); \
 		fi \
-		if [ -d $(VOLUME_WORDPRESS) ] \
+		if [ -d $(VOLUME_WORDPRESS) ]; \
 		then \
 			rm -rf $(VOLUME_WORDPRESS); \
 		fi \
