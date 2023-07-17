@@ -80,7 +80,43 @@ $(VOLUME_WORDPRESS):
 docker-compose_up : $(VOLUME_MARIADB) $(VOLUME_WORDPRESS)
 	@if [ ${WHOAMI} = root ]; \
 	then \
-		docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml up -d;\
-	else \
-		@echo "\033[38;5;196m[docker-compose_up]\033[0m: ${WHOAMI} is not root"; \
+		docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml up;\
+	else @echo "\033[38;5;048m[docker-compose_up]\033[0m: ${WHOAMI} is not root"; \
 	fi
+
+docker-compose_down : 
+	@if [ ${WHOAMI} = root ]; \
+	then \
+		docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml down; \
+		@echo "\033[38;5;226m[docker-compose_down]\033[0m: docker-compose down"; \
+	else @echo "\033[38;5;160m[docker-compose_down]\033[0m: ${WHOAMI} is not root"; \
+	fi
+
+docker-composer_ps :
+	@if [ ${WHOAMI} = root ]; \
+	then \
+		docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml ps; \
+		@echo "\033[38;5;226m[docker-composer_ps]\033[0m: docker-compose ps"; \
+	else @echo "\033[38;5;226m[docker-composer_ps]\033[0m: ${WHOAMI} is not root"; \
+	fi
+
+docker-compose_clean : docker-compose_down
+	@if [ ${WHOAMI} = root ]; \
+	then \
+		docker rmi nginx:42 mariadb:42 wordpress:42; \
+		@echo "\033[38;5;051m[docker-compose_clean]\033[0m: docker-compose images clear"; \
+	else @echo "\033[38;5;051m[docker-compose_clean]\033[0m: ${WHOAMI} is not root"; \
+	fi
+
+docker-compose_fclean : docker-compose_clean
+	@if [ ${WHOAMI} = root ]; \
+	then \
+		rm -rf $(VOLUME_MARIADB); \
+		rm -rf $(VOLUME_WORDPRESS); \
+		@echo "\033[38;5;051m[docker-compose_fclean]\033[0m: docker-compose vloume data clear"; \
+	else @echo "\033[38;5;051m[docker-compose_fclean]\033[0m: ${WHOAMI} is not root"; \
+	fi
+
+docker-compose_re : docker-compose_fclean
+docker-compose_re : docker-compose_up
+	@echo "\033[38;5;123m[docker-compose_re]\033[0m: docker-compose restart~ ";
