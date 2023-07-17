@@ -1,16 +1,15 @@
 # Inception
-
+# 주의!!  debian bullseye 기준입니다
 # 1. Ssh port 설정  [Port 22 경우 skip]
 echo "Port 22" > /etc/ssh/sshd_config.d/cluster.conf
 service ssh restart
 su 
 
-# 2. git 설치 
+# 2. 기본 설치 
 su 
 password: 입력
 apt-get update
-apt-get install -y sudo
-apt-get install -y git
+apt-get install -y sudo git make
 
 
 ### makefile 자동화 or 하위 따라가기

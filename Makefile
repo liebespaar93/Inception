@@ -4,6 +4,10 @@ docker_apt_checker=docker_apt_checker.conf
 docker_install_checker=docker_install_checker.conf
 docker_compose_install_checker=docker_compose_install_checker.conf
 
+debian_arch=$(dpkg --print-architecture)
+debian_v_name=$(. /etc/os-release && echo $VERSION_CODENAME)
+
+
 all : 
 
 $(nameserver):
@@ -22,7 +26,7 @@ $(docker_apt_checker):
 	@echo "\033[38;5;047m[docker_apt_checker]\033[0m: chmod a+r start ";
 	sudo chmod a+r /etc/apt/keyrings/docker.gpg;
 	@echo "\033[38;5;047m[docker_apt_checker]\033[0m: tee strat ";
-	echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian  bullseye stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null;
+	echo "deb [arch=$(debian_arch) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian  $(debian_v_name) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null;
 	touch $(docker_apt_checker);
 
 $(docker_install_checker):
