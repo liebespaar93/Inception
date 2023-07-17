@@ -145,6 +145,6 @@ docker-compose_fclean : docker-compose_clean
 	else echo "\033[38;5;196m[docker-compose_fclean]\033[0m: $(WHOAMI) is not root"; \
 	fi
 
-docker-compose_re : docker-compose_fclean
 docker-compose_re : docker-compose_up
+docker-compose_re : docker-compose_fclean
 	@echo "\033[38;5;123m[docker-compose_re]\033[0m: docker-compose restart~ ";
