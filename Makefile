@@ -126,11 +126,11 @@ docker-compose_fclean : docker-compose_clean
 		if [ -d $(VOLUME_MARIADB) ]; \
 		then \
 			rm -rf $(VOLUME_MARIADB); \
-		fi \
+		fi; \
 		if [ -d $(VOLUME_WORDPRESS) ]; \
 		then \
 			rm -rf $(VOLUME_WORDPRESS); \
-		fi \
+		fi; \
 		echo "\033[38;5;051m[docker-compose_fclean]\033[0m: docker-compose vloume data clear"; \
 	else echo "\033[38;5;196m[docker-compose_fclean]\033[0m: $(WHOAMI) is not root"; \
 	fi
