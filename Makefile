@@ -90,7 +90,7 @@ docker-compose_up : $(VOLUME_MARIADB) $(VOLUME_WORDPRESS) $(DOCKER_COMPOSE_RUN)
 	
 
 docker-compose_down : 
-	@if [ $(WHOAMI)= root ]; \
+	@if [ $(WHOAMI) = root ]; \
 	then \
 		if [ -f $(DOCKER_COMPOSE_RUN) ]; \
 		then \
