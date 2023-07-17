@@ -1,63 +1,86 @@
 
-nameserver=nameserver_checker.conf
-docker_apt_checker=docker_apt_checker.conf
-docker_install_checker=docker_install_checker.conf
-docker_compose_install_checker=docker_compose_install_checker.conf
+NAMESERVER=nameserver_checker.conf
+DOCKER_APT_CHECKER=docker_apt_checker.conf
+DOCKER_INSTALL_CHECKER=docker_install_checker.conf
+DOCKER_COMPOSE_INSTALL_CHECKER=docker_compose_install_checker.conf
 
+ROOTDIR = $(abspath $(dir $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))))
+VOLUME_MARIADB=$(ROOTDIR)/srcs/requirements/mariadb/volume
+VOLUME_WORDPRESS=$(ROOTDIR)/srcs/requirements/wordpress/volume
 
+WHOAMI    := $(shell whoami)
 
 all : 
 
-$(nameserver):
+$(NAMESERVER):
+	@echo "\033[38;5;047m[NAMESERVER]\033[0m: add nameserver 8.8.8.8 ";
 	@if [ -f /usr/bin/sudo ];\
 	then \
 		sudo echo "nameserver 8.8.8.8" >> /etc/resolv.conf; \
-		touch $(nameserver); \
+		touch $(NAMESERVER); \
 	fi
 
-$(docker_apt_checker):
+$(DOCKER_APT_CHECKER):
 	sudo apt-get update;
 	sudo apt-get install -y ca-certificates curl gnupg;
 	sudo install -m 0755 -d /etc/apt/keyrings;
-	@echo "\033[38;5;047m[docker_apt_checker]\033[0m: curl a+r start ";
+	@echo "\033[38;5;047m[DOCKER_APT_CHECKER]\033[0m: curl a+r start ";
 	curl -4fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg;
-	@echo "\033[38;5;047m[docker_apt_checker]\033[0m: chmod a+r start ";
+	@echo "\033[38;5;047m[DOCKER_APT_CHECKER]\033[0m: chmod a+r start ";
 	sudo chmod a+r /etc/apt/keyrings/docker.gpg;
-	@echo "\033[38;5;047m[docker_apt_checker]\033[0m: tee strat ";
+	@echo "\033[38;5;047m[DOCKER_APT_CHECKER]\033[0m: tee strat ";
 	echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian  bullseye stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null;
-	touch $(docker_apt_checker);
+	touch $(DOCKER_APT_CHECKER);
 
-$(docker_install_checker):
+$(DOCKER_INSTALL_CHECKER):
 	sudo apt-get update;
 	sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin;
-	touch $(docker_install_checker);
+	touch $(DOCKER_INSTALL_CHECKER);
 
-$(docker_compose_install_checker):
+$(DOCKER_COMPOSE_INSTALL_CHECKER):
 	curl -SL https://github.com/docker/compose/releases/download/v2.20.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose;
 	sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose;
 	chmod +x /usr/bin/docker-compose;
-	touch $(docker_compose_install_checker);
+	touch $(DOCKER_COMPOSE_INSTALL_CHECKER);
 
-set_resolv : $(nameserver)
+set_resolv : $(NAMESERVER)
 	@echo "\033[38;5;047m[set_resolv]\033[0m: set_resolv setting"
 
 unset_reslov :
-	@if [ -f ./$(nameserver) ]; then rm $(nameserver); fi
+	@if [ -f ./$(NAMESERVER) ]; then rm $(NAMESERVER); fi
 	$(shell (sed '/nameserver 8.8.8.8/d' /etc/resolv.conf) | cat > temp; cp temp /etc/resolv.conf ; rm temp)
 
-set_docker_apt : set_resolv  $(docker_apt_checker)
+set_docker_apt : set_resolv  $(DOCKER_APT_CHECKER)
 	@echo "\033[38;5;047m[docker_apt]\033[0m: set_docker_apt setting"
 	
 
-docker_install : set_docker_apt $(docker_install_checker) docker-compose
+docker_install : set_docker_apt $(DOCKER_INSTALL_CHECKER) docker-compose_install
 	@echo "\033[38;5;047m[docker_install]\033[0m: docker_install install"
 
 unset_docker :
 	@echo "\033[38;5;196m[unset_docker]\033[0m: unset_docker unset"
-	@if [ -f ./$(docker_apt_checker) ]; then rm $(docker_apt_checker); fi; \
-	@if [ -f ./$(docker_install_checker) ]; then rm $(docker_install_checker); fi; \
-	@if [ -f ./$(docker_compose_install_checker) ]; then rm $(docker_compose_install_checker); fi; \
+	@if [ -f ./$(DOCKER_APT_CHECKER) ]; then rm $(DOCKER_APT_CHECKER); fi; \
+	@if [ -f ./$(DOCKER_INSTALL_CHECKER) ]; then rm $(DOCKER_INSTALL_CHECKER); fi; \
+	@if [ -f ./$(DOCKER_COMPOSE_INSTALL_CHECKER) ]; then rm $(DOCKER_COMPOSE_INSTALL_CHECKER); fi; \
 	for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do apt-get remove $pkg; done;
 
-docker-compose : set_docker_apt $(docker_compose_install_checker)
-	@echo "\033[38;5;047m[docker-compose]\033[0m: docker-compose install"
+docker-compose_install : set_docker_apt $(DOCKER_COMPOSE_INSTALL_CHECKER)
+	@echo "\033[38;5;047m[docker-compose_install\033[0m: docker-compose install"
+
+
+
+
+$(VOLUME_MARIADB):
+	mkdir $(VOLUME_MARIADB);
+
+$(VOLUME_WORDPRESS):
+	mkdir $(VOLUME_WORDPRESS);
+
+
+docker-compose_up : $(VOLUME_MARIADB) $(VOLUME_WORDPRESS)
+	@if [ ${WHOAMI} = root ]; \
+	then \
+		docker-compose up -C $(ROOTDIR)/srcs/.\
+	else \
+		@echo "\033[38;5;196m[docker-compose_up]\033[0m: ${WHOAMI} is not root"; \
+	fi
