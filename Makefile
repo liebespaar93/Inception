@@ -8,6 +8,7 @@ DOCKER_COMPOSE_INSTALL_CHECKER=$(ROOTDIR)/docker_compose_install_checker.conf
 
 DOCKER_COMPOSE_RUN=$(ROOTDIR)/docker_compose_run.conf
 
+DOCKER_42_IMAGE=docker_42_image.conf
 VOLUME_MARIADB=$(ROOTDIR)/srcs/requirements/mariadb/volume
 VOLUME_WORDPRESS=$(ROOTDIR)/srcs/requirements/wordpress/volume
 
@@ -70,6 +71,10 @@ unset_docker :
 docker-compose_install : set_docker_apt $(DOCKER_COMPOSE_INSTALL_CHECKER)
 	@echo "\033[38;5;047m[docker-compose_install\033[0m: docker-compose install"
 
+$(DOCKER_42_IMAGE):
+	touch $(DOCKER_42_IMAGE);
+	@echo "\033[38;5;047m[DOCKER_42_IMAGE]\033[0m: mariadb:42 nginx:42 wordpress:42 image start makeing";
+
 $(VOLUME_MARIADB):
 	mkdir $(VOLUME_MARIADB);
 	@echo "\033[38;5;047m[VOLUME_MARIADB]\033[0m: volume mkdir $(VOLUME_MARIADB)";
@@ -78,7 +83,7 @@ $(VOLUME_WORDPRESS):
 	mkdir $(VOLUME_WORDPRESS);
 	@echo "\033[38;5;047m[VOLUME_WORDPRESS]\033[0m: volume mkdir $(VOLUME_WORDPRESS)";
 	
-docker-compose_up : $(VOLUME_MARIADB) $(VOLUME_WORDPRESS)
+docker-compose_up : $(VOLUME_MARIADB) $(VOLUME_WORDPRESS) $(DOCKER_42_IMAGE)
 	@if [ $(WHOAMI) = root ]; \
 	then \
 		if ! [ -f $(DOCKER_COMPOSE_RUN) ]; \
@@ -115,8 +120,13 @@ docker-compose_ps :
 docker-compose_clean : docker-compose_down
 	@if [ $(WHOAMI) = root ]; \
 	then \
-		docker rmi nginx:42 mariadb:42 wordpress:42; \
-		echo "\033[38;5;051m[docker-compose_clean]\033[0m: docker-compose images clear"; \
+		if [ -f $(DOCKER_42_IMAGE) ]; \
+		then \
+			docker rmi nginx:42 mariadb:42 wordpress:42; \
+			rm $(DOCKER_42_IMAGE); \
+			echo "\033[38;5;189m[docker-compose_clean]\033[0m: docker-compose images clear"; \
+		else echo "\033[38;5;189m[docker-compose_clean]\033[0m: all ready rmi docker-compose 42 images "; \
+		fi; \
 	else echo "\033[38;5;196m[docker-compose_clean]\033[0m: $(WHOAMI) is not root"; \
 	fi
 
