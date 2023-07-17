@@ -80,7 +80,7 @@ $(VOLUME_WORDPRESS):
 docker-compose_up : $(VOLUME_MARIADB) $(VOLUME_WORDPRESS)
 	@if [ ${WHOAMI} = root ]; \
 	then \
-		docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml\ up -d
+		docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml up -d \
 	else \
 		@echo "\033[38;5;196m[docker-compose_up]\033[0m: ${WHOAMI} is not root"; \
 	fi
