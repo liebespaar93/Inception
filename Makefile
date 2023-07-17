@@ -12,6 +12,12 @@ $(nameserver):
 		touch $(nameserver); \
 	fi
 
+$(docker_apt_checker):
+	touch $(docker_apt_checker);
+
+$(docker_install_checker):
+	touch $(docker_install_checker);
+
 set_resolv : $(nameserver)
 
 unset_reslov :
@@ -30,13 +36,13 @@ set_docker_apt : set_resolv $(docker_apt_checker)
   	"$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
   	sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 	sudo apt-get update
-	touch $(docker_apt_checker);
 
 docker_install : set_docker_apt $(docker_install_checker)
 	sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-	touch $(docker_install_checker);
 
 unset_docker :
+	@if [ -f ./$(docker_apt_checker) ]; then rm $(docker_apt_checker); fi
+	@if [ -f ./$(docker_install_checker) ]; then rm $(docker_install_checker); fi
 	for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do apt-get remove $pkg; done
 
 # docker-compose-up :
