@@ -1,12 +1,13 @@
 
-NAMESERVER=nameserver_checker.conf
-DOCKER_APT_CHECKER=docker_apt_checker.conf
-DOCKER_INSTALL_CHECKER=docker_install_checker.conf
-DOCKER_COMPOSE_INSTALL_CHECKER=docker_compose_install_checker.conf
-
-DOCKER_COMPOSE_RUN=docker_compose_run.conf
-
 ROOTDIR = $(abspath $(dir $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))))
+
+NAMESERVER=$(ROOTDIR)/nameserver_checker.conf
+DOCKER_APT_CHECKER=$(ROOTDIR)/docker_apt_checker.conf
+DOCKER_INSTALL_CHECKER=$(ROOTDIR)/docker_install_checker.conf
+DOCKER_COMPOSE_INSTALL_CHECKER=$(ROOTDIR)/docker_compose_install_checker.conf
+
+DOCKER_COMPOSE_RUN=$(ROOTDIR)/docker_compose_run.conf
+
 VOLUME_MARIADB=$(ROOTDIR)/srcs/requirements/mariadb/volume
 VOLUME_WORDPRESS=$(ROOTDIR)/srcs/requirements/wordpress/volume
 
