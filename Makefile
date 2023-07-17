@@ -70,18 +70,6 @@ unset_docker :
 docker-compose_install : set_docker_apt $(DOCKER_COMPOSE_INSTALL_CHECKER)
 	@echo "\033[38;5;047m[docker-compose_install\033[0m: docker-compose install"
 
-$(DOCKER_COMPOSE_RUN):
-	@if [ $(WHOAMI) = root ]; \
-	then \
-		if ! [ -f $(DOCKER_COMPOSE_RUN) ]; \
-		then \
-			docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml up -d; \
-			echo "\033[38;5;048m[DOCKER_COMPOSE_RUN]\033[0m: docker-compose start running"; \
-			touch $(DOCKER_COMPOSE_RUN); \
-		else echo "\033[38;5;202m[DOCKER_COMPOSE_RUN]\033[0m: docker-compose is all ready running";
-	else echo "\033[38;5;196m[DOCKER_COMPOSE_RUN]\033[0m: $(WHOAMI) is not root"; \
-	fi;
-
 $(VOLUME_MARIADB):
 	mkdir $(VOLUME_MARIADB);
 	@echo "\033[38;5;047m[VOLUME_MARIADB]\033[0m: volume mkdir $(VOLUME_MARIADB)";
@@ -90,8 +78,17 @@ $(VOLUME_WORDPRESS):
 	mkdir $(VOLUME_WORDPRESS);
 	@echo "\033[38;5;047m[VOLUME_WORDPRESS]\033[0m: volume mkdir $(VOLUME_WORDPRESS)";
 	
-docker-compose_up : $(VOLUME_MARIADB) $(VOLUME_WORDPRESS) $(DOCKER_COMPOSE_RUN)
-	
+docker-compose_up : $(VOLUME_MARIADB) $(VOLUME_WORDPRESS)
+	@if [ $(WHOAMI) = root ]; \
+	then \
+		if ! [ -f $(DOCKER_COMPOSE_RUN) ]; \
+		then \
+			touch $(DOCKER_COMPOSE_RUN); \
+			docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml up -d; \
+			echo "\033[38;5;048m[docker-compose_up]\033[0m: docker-compose start running"; \
+		else echo "\033[38;5;202m[docker-compose_up]\033[0m: docker-compose is all ready running";
+	else echo "\033[38;5;196m[docker-compose_up]\033[0m: $(WHOAMI) is not root"; \
+	fi;
 
 docker-compose_down : 
 	@if [ $(WHOAMI) = root ]; \
