@@ -87,6 +87,7 @@ docker-compose_up : $(VOLUME_MARIADB) $(VOLUME_WORDPRESS)
 			docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml up -d; \
 			echo "\033[38;5;048m[docker-compose_up]\033[0m: docker-compose start running"; \
 		else echo "\033[38;5;202m[docker-compose_up]\033[0m: docker-compose is all ready running"; \
+		fi; \
 	else echo "\033[38;5;196m[docker-compose_up]\033[0m: $(WHOAMI) is not root"; \
 	fi;
 
