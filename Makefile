@@ -95,7 +95,7 @@ docker-compose_down :
 		if [ -f $(DOCKER_COMPOSE_RUN) ] \
 		then \
 			docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml down; \
-		fi \
+		fi
 		echo "\033[38;5;226m[docker-compose_down]\033[0m: docker-compose down"; \
 	else echo "\033[38;5;160m[docker-compose_down]\033[0m: $(WHOAMI) is not root"; \
 	fi
