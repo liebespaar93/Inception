@@ -23,6 +23,7 @@ $(docker_apt_checker):
 	touch $(docker_apt_checker);
 
 $(docker_install_checker):
+	sudo apt-get update;
 	sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin;
 	touch $(docker_install_checker);
 
