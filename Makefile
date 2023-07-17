@@ -75,7 +75,7 @@ $(DOCKER_COMPOSE_RUN):
 	then \
 		docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml up;\
 	else echo "\033[38;5;048m[docker-compose_up]\033[0m: $(WHOAMI) is not root"; \
-	fi \
+	fi; \
 	touch $(DOCKER_COMPOSE_RUN);
 
 $(VOLUME_MARIADB):
