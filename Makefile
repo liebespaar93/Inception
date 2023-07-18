@@ -85,6 +85,7 @@ $(VOLUME_WORDPRESS):
 	
 docker-compose_up : $(VOLUME_MARIADB) $(VOLUME_WORDPRESS) $(DOCKER_42_IMAGE)
 ifneq ( "$(WHOAMI)", "root" )
+	echo "'$(WHOAMI)' 'root'"
 	@echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not root";
 else
   ifneq ($(shell test -e $(DOCKER_COMPOSE_RUN) && echo -n yes), yes)
