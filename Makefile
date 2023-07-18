@@ -84,29 +84,29 @@ $(VOLUME_WORDPRESS):
 	@echo "\033[38;5;047m[VOLUME_WORDPRESS]\033[0m: volume mkdir $(VOLUME_WORDPRESS)";
 	
 docker-compose_up : $(VOLUME_MARIADB) $(VOLUME_WORDPRESS) $(DOCKER_42_IMAGE)
-ifneq "$(WHOAMI)" "root"
+ifneq "root" "root"
 	@echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not root";
 else
-  ifneq "$(shell test -e $(DOCKER_COMPOSE_RUN) && echo -n yes)" "yes"
-	docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml up -d;
-	touch $(DOCKER_COMPOSE_RUN);
-	@echo "\033[38;5;048m[docker-compose_up]\033[0m: docker-compose start running";
-  else
-	@echo "\033[38;5;202m[docker-compose_up]\033[0m: docker-compose is all ready running";
-  endif
+	@if ! [ -f $(DOCKER_COMPOSE_RUN) ]; then \
+		docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml up -d; \
+		touch $(DOCKER_COMPOSE_RUN); \
+		echo "\033[38;5;048m[docker-compose_up]\033[0m: docker-compose start running"; \
+	else \
+		echo "\033[38;5;202m[docker-compose_up]\033[0m: docker-compose is all ready running"; \
+	fi;
 endif
 
 docker-compose_down : 
 ifneq "$(WHOAMI)" "root"
 	@echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not root";
 else
-  ifeq "$(shell test -e $(DOCKER_COMPOSE_RUN) && echo -n yes)" "yes"
-	docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml down;
-	rm $(DOCKER_COMPOSE_RUN);
-	@echo "\033[38;5;160m[docker-compose_down]\033[0m: docker-compose down";
-  else
-	@echo "\033[38;5;160m[docker-compose_down]\033[0m: docker-compose is not running";
-  endif
+	@if [ -f $(DOCKER_COMPOSE_RUN) ]; then \
+		docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml down; \
+		rm $(DOCKER_COMPOSE_RUN); \
+		echo "\033[38;5;160m[docker-compose_down]\033[0m: docker-compose down"; \
+	else \
+		echo "\033[38;5;160m[docker-compose_down]\033[0m: docker-compose is not running"; \
+	fi;
 endif
 
 docker-compose_ps :
@@ -121,12 +121,12 @@ docker-compose_clean : docker-compose_down
 ifneq "$(WHOAMI)" "root"
 	@echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not root";
 else
-  ifeq "$(shell test -e $(DOCKER_42_IMAGE) && echo -n yes)" "yes"
-	docker rmi nginx:42 mariadb:42 wordpress:42 && rm $(DOCKER_42_IMAGE);
-	@echo "\033[38;5;189m[docker-compose_clean]\033[0m: docker-compose images clear";
-  else
-	@echo "\033[38;5;189m[docker-compose_clean]\033[0m: all ready rmi docker-compose 42 images ";
-  endif
+	@if [ -f $(DOCKER_42_IMAGE) ]; then \
+		docker rmi nginx:42 mariadb:42 wordpress:42 && rm $(DOCKER_42_IMAGE); \
+		echo "\033[38;5;189m[docker-compose_clean]\033[0m: docker-compose images clear"; \
+	else \
+		echo "\033[38;5;189m[docker-compose_clean]\033[0m: all ready rmi docker-compose 42 images "; \
+	fi;
 endif
 
 docker-compose_fclean : docker-compose_clean
