@@ -15,8 +15,6 @@ VOLUME /var/lib/mysql
 COPY ./tools/. /tools/.
 COPY ./conf/. /conf/.
 
-EXPOSE 3306
-
 RUN chmod +x /tools/entrypoint.sh
 ENTRYPOINT [ "/tools/entrypoint.sh" ]
 
