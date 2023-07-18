@@ -65,13 +65,14 @@ ft_wordpress_set()
 			wordpress_error "No file wordpress.tar.gz"
 			exit 1
 		fi
-		tar -xzvf wordpress.tar.gz -C /var/www/html --strip 1 
+		tar -xzvf wordpress.tar.gz -C /var/www/wordpress --strip 1 
 		rm wordpress.tar.gz
 	fi
-	# chown -R www-data:www-data /var/www/html; 
-	# chown -R www-data:www-data wp-content;
-	chown -R www-data:www-data /var/www/html
-	wordpress_note "chown -R www-data:www-data /var/www/html"
+	chown -R www-data /var/www/wordpress; 
+	chown -R 775 /var/www/wordpress; 
+	chown -R www-data:www-data wp-content;
+	chown -R www-data:www-data /var/www/wordpress
+	wordpress_note "chown -R www-data:www-data /var/www/wordpress"
 	chown -R www-data:www-data wp-content
 	wordpress_note "chown -R www-data:www-data wp-content"
 	chmod -R 1777 wp-content
@@ -86,7 +87,7 @@ ft_web_config_set()
 		wordpress_error "www.conf not found"
 		exit 1;
 	fi
-	cp /conf/wp-config.php /var/www/html/wp-config.php
+	cp /conf/wp-config.php /var/www/wordpress/wp-config.php
 	wordpress_ready "config.php Copy Done";
 }
 _main()

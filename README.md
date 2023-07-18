@@ -48,3 +48,18 @@ sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 # - docker compose plugin
+
+
+
+
+
+# php 테스트
+
+https://easyengine.io/tutorials/php/directly-connect-php-fpm/
+
+
+SCRIPT_NAME=/index.php \
+SCRIPT_FILENAME=/index.php \
+DOCUMENT_ROOT=/ \
+REQUEST_METHOD=GET \
+cgi-fcgi -bind -connect 127.0.0.1:9000

@@ -14,9 +14,9 @@ RUN set -eux \
 COPY ./conf /conf
 COPY ./tools /tools
 
-VOLUME /var/www/html
+VOLUME /var/www/wordpress
 
-WORKDIR /var/www/html
+WORKDIR /var/www/wordpress
 
 RUN chmod +x /tools/entrypoint.sh
 
