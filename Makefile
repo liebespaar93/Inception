@@ -88,13 +88,13 @@ ifneq ( "$(WHOAMI)", "root" )
 	echo "'$(WHOAMI)' 'root'"
 	@echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not root";
 else
-  ifneq ($(shell test -e $(DOCKER_COMPOSE_RUN) && echo -n yes), yes)
-	docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml up -d;
-	touch $(DOCKER_COMPOSE_RUN);
-	@echo "\033[38;5;048m[docker-compose_up]\033[0m: docker-compose start running";
-  else
+#   ifneq ($(shell test -e $(DOCKER_COMPOSE_RUN) && echo -n yes), yes)
+# 	docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml up -d;
+# 	touch $(DOCKER_COMPOSE_RUN);
+# 	@echo "\033[38;5;048m[docker-compose_up]\033[0m: docker-compose start running";
+#   else
 	@echo "\033[38;5;202m[docker-compose_up]\033[0m: docker-compose is all ready running";
-  endif
+#   endif
 endif
 
 docker-compose_down : 
