@@ -12,7 +12,7 @@ DOCKER_42_IMAGE=docker_42_image.conf
 VOLUME_MARIADB=$(ROOTDIR)/srcs/requirements/mariadb/volume
 VOLUME_WORDPRESS=$(ROOTDIR)/srcs/requirements/wordpress/volume
 
-WHOAMI    := $(shell whoami)
+WHOAMI = $(shell whoami)
 
 all : 
 
@@ -63,9 +63,9 @@ docker_install : set_docker_apt $(DOCKER_INSTALL_CHECKER) docker-compose_install
 
 unset_docker :
 	@echo "\033[38;5;196m[unset_docker]\033[0m: unset_docker unset"
-	@if [ -f ./$(DOCKER_APT_CHECKER) ]; then rm $(DOCKER_APT_CHECKER); fi; \
-	@if [ -f ./$(DOCKER_INSTALL_CHECKER) ]; then rm $(DOCKER_INSTALL_CHECKER); fi; \
-	@if [ -f ./$(DOCKER_COMPOSE_INSTALL_CHECKER) ]; then rm $(DOCKER_COMPOSE_INSTALL_CHECKER); fi; \
+	@if [ -f ./$(DOCKER_APT_CHECKER) ]; then rm $(DOCKER_APT_CHECKER); fi;
+	@if [ -f ./$(DOCKER_INSTALL_CHECKER) ]; then rm $(DOCKER_INSTALL_CHECKER); fi;
+	@if [ -f ./$(DOCKER_COMPOSE_INSTALL_CHECKER) ]; then rm $(DOCKER_COMPOSE_INSTALL_CHECKER); fi;
 	for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do apt-get remove $pkg; done;
 
 docker-compose_install : set_docker_apt $(DOCKER_COMPOSE_INSTALL_CHECKER)
@@ -84,7 +84,7 @@ $(VOLUME_WORDPRESS):
 	@echo "\033[38;5;047m[VOLUME_WORDPRESS]\033[0m: volume mkdir $(VOLUME_WORDPRESS)";
 	
 docker-compose_up : $(VOLUME_MARIADB) $(VOLUME_WORDPRESS) $(DOCKER_42_IMAGE)
-ifneq ( "root", "root" )
+ifeq ( "root", "root" )
 	echo "'$(WHOAMI)' 'root'";
 	@echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not root";
 else
