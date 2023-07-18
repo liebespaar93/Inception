@@ -133,9 +133,9 @@ docker-compose_fclean : docker-compose_clean
 ifneq "$(WHOAMI)" "root"
 	@echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not root";
 else
-	if [ -d $(VOLUME_MARIADB) ]; then rm -rf $(VOLUME_MARIADB); fi;
-	if [ -d $(VOLUME_WORDPRESS) ]; then rm -rf $(VOLUME_WORDPRESS); fi;
-	echo "\033[38;5;051m[docker-compose_fclean]\033[0m: docker-compose vloume data clear";
+	@if [ -d $(VOLUME_MARIADB) ]; then rm -rf $(VOLUME_MARIADB); fi;
+	@if [ -d $(VOLUME_WORDPRESS) ]; then rm -rf $(VOLUME_WORDPRESS); fi;
+	@echo "\033[38;5;051m[docker-compose_fclean]\033[0m: docker-compose vloume data clear";
 endif
 
 docker-compose_re : docker-compose_up
