@@ -19,7 +19,7 @@ RUN set -eux \
 	# && update-rc.d -f nginx disable;
 
 COPY ./conf/default /etc/nginx/sites-available/default
-COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+# COPY ./conf/nginx.conf /etc/nginx/nginx.conf
 COPY ./tools/. /tools/.
 EXPOSE 443
 

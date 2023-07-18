@@ -23,7 +23,7 @@ services:
     networks:
       - net
     volumes:
-      - v-wordpress:/var/www/html
+      - v-wordpress:/var/www/wordpress
     depends_on:
       - mariadb
     ports:
@@ -41,7 +41,7 @@ services:
     networks:
       - net
     volumes:
-      - v-wordpress:/var/www/html
+      - v-wordpress:/var/www/wordpress
     depends_on:
       - mariadb
       - wordpress

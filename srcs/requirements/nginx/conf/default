@@ -41,7 +41,7 @@ server {
 	ssl_certificate /etc/ssl/certs/kyoulee.crt;
 	ssl_certificate_key /etc/ssl/private/kyoulee.key;
 	
-	root /var/www/html;
+	root /var/www/wordpress;
 
 	# Add index.php to the list if you are using PHP
     index index.php;
