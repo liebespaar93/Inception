@@ -87,7 +87,7 @@ docker-compose_up : $(VOLUME_MARIADB) $(VOLUME_WORDPRESS) $(DOCKER_42_IMAGE)
 ifneq "$(WHOAMI)" "root"
 	@echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not root";
 else
-  ifneq ($(shell test -e $(DOCKER_COMPOSE_RUN) && echo -n yes), yes)
+  ifneq "$(shell test -e $(DOCKER_COMPOSE_RUN) && echo -n yes)" "yes"
 	docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml up -d;
 	touch $(DOCKER_COMPOSE_RUN);
 	@echo "\033[38;5;048m[docker-compose_up]\033[0m: docker-compose start running";
@@ -100,7 +100,7 @@ docker-compose_down :
 ifneq "$(WHOAMI)" "root"
 	@echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not root";
 else
-  ifneq ($(shell test -e $(DOCKER_COMPOSE_RUN) && echo -n yes), yes)
+  ifneq "$(shell test -e $(DOCKER_COMPOSE_RUN) && echo -n yes)" "yes"
 	docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml down;
 	rm $(DOCKER_COMPOSE_RUN);
 	@echo "\033[38;5;160m[docker-compose_down]\033[0m: docker-compose down";
@@ -121,7 +121,7 @@ docker-compose_clean : docker-compose_down
 ifneq "$(WHOAMI)" "root"
 	@echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not root";
 else
-  ifneq ($(shell test -e $(DOCKER_42_IMAGE) && echo -n yes), yes)
+  ifneq "$(shell test -e $(DOCKER_42_IMAGE) && echo -n yes)" "yes"
 	docker rmi nginx:42 mariadb:42 wordpress:42 && rm $(DOCKER_42_IMAGE);
 	@echo "\033[38;5;189m[docker-compose_clean]\033[0m: docker-compose images clear";
   else
