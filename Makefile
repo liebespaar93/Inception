@@ -151,7 +151,7 @@ docker-compose_re : docker-compose_fclean
 
 
 docker-compose_up_nodaemonize :  $(VOLUME_MARIADB) $(VOLUME_WORDPRESS) $(DOCKER_42_IMAGE)
-	@if [ $(WHOAMI) = root ]; \
+	@if ! [ $(WHOAMI) = root ]; \
 	then \
 		echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not root"; \
 		exit 1; \
