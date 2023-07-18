@@ -19,6 +19,8 @@ WORKDIR /var/www/html
 
 RUN chmod +x /tools/entrypoint.sh
 
+EXPOSE 9000
+
 ENTRYPOINT [ "/tools/entrypoint.sh" ]
 
 CMD ["/usr/sbin/php-fpm8.2", "--nodaemonize"]
