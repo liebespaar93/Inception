@@ -153,11 +153,13 @@ docker-compose_re : docker-compose_fclean
 docker-compose_up_nodaemonize :  $(VOLUME_MARIADB) $(VOLUME_WORDPRESS) $(DOCKER_42_IMAGE)
 	@if [ $(WHOAMI) = root ]; \
 	then \
-		if ! [ -f $(DOCKER_COMPOSE_RUN) ]; \
-		then \
-			echo "\033[38;5;048m[docker-compose_up_nodaemonize]\033[0m: docker-compose start running"; \
-			docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml up; \
-		else echo "\033[38;5;202m[docker-compose_up_nodaemonize]\033[0m: docker-compose is all ready running"; \
-		fi; \
-	else echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not root"; \
-	fi;
+		echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not root"; \
+		exit 1; \
+	fi ; 
+	if [ -f $(DOCKER_COMPOSE_RUN) ]; \
+	then \
+		echo "\033[38;5;202m[docker-compose_up_nodaemonize]\033[0m: docker-compose is all ready running"; \
+		exit 1; \
+	if 
+	echo "\033[38;5;048m[docker-compose_up_nodaemonize]\033[0m: docker-compose start running";
+	docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml up;
