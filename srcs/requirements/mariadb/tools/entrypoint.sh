@@ -215,7 +215,7 @@ ft_temp_server_stop() {
 	killall -15 mariadbd
 	kill "$MARIADB_PID"
 	wait "$MARIADB_PID"
-	mysql_destory "[PID] temp server Clear"
+	mysql_destory "[PID $MARIADB_PID] temp server Clear"
 }
 
 
