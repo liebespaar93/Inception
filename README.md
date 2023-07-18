@@ -63,3 +63,8 @@ SCRIPT_FILENAME=/index.php \
 DOCUMENT_ROOT=/ \
 REQUEST_METHOD=GET \
 cgi-fcgi -bind -connect 127.0.0.1:9000
+
+
+#network 확인
+apt install net-tools
+sudo netstat -ltup
