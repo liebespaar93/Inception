@@ -26,8 +26,6 @@ services:
       - v-wordpress:/var/www/wordpress
     depends_on:
       - mariadb
-    ports:
-      - 9000:9000
 
   nginx:
     build: ./requirements/nginx/.

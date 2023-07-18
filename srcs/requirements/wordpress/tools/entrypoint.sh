@@ -95,6 +95,7 @@ _main()
 	ft_php-fpm_set
 	ft_wordpress_set
 	ft_web_config_set
+	wordpress_service "wordpresss php-fpm8.2 server on"
 }
 
 _main

@@ -28,6 +28,9 @@ mysql_destory() {
 mysql_env() {
 	mysql_log ENV "045" "$@"
 }
+mysql_service() {
+	mysql_log SERVICE "165" "$@"
+}
 
 ######
 # check user
@@ -248,6 +251,8 @@ _main()
 	ft_temp_server_start
 	ft_set_database
 	ft_temp_server_stop
+	mysql_ready "mysql health check done!"
+	mysql_service "mysql start gosu mysql mysqld_safe server on"
 }
 
 _main
