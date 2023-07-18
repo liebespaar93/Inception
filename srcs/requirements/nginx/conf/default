@@ -44,32 +44,32 @@ server {
 	root /var/www/html;
 
 	# Add index.php to the list if you are using PHP
-    # index index.php;
+    index index.php;
 
 	server_name kyoulee.42.kr;
 
-	# location / {
-	# 	# First attempt to serve request as file, then
-	# 	# as directory, then fall back to displaying a 404.
-	# 	try_files $uri $uri/ /index.php$is_args$args;
-	# }
+	location / {
+		# First attempt to serve request as file, then
+		# as directory, then fall back to displaying a 404.
+		try_files $uri $uri/ /index.php$is_args$args;
+	}
 
 	# pass PHP scripts to FastCGI server
-	# location ~ \.php$ {
-	# 	include snippets/fastcgi-php.conf;
+	location ~ \.php$ {
+		include snippets/fastcgi-php.conf;
 
-	# 	# With php-fpm (or other unix sockets):
-	# 	# fastcgi_pass wordpress:/run/php/php8.2-fpm.sock;
-	# 	# With php-cgi (or other tcp sockets):
-	# 	# fastcgi_pass	wordpress:9001;
-	# 	fastcgi_pass	wordpress:9000;
+		# With php-fpm (or other unix sockets):
+		# fastcgi_pass wordpress:/run/php/php8.2-fpm.sock;
+		# With php-cgi (or other tcp sockets):
+		# fastcgi_pass	wordpress:9001;
+		fastcgi_pass	wordpress:9000;
 
-    #     # try_files $uri =404;
-    #     # fastcgi_split_path_info ^(.+\.php)(/.+)$;
-	# 	# fastcgi_param	SCRIPT_FILENAME $document_root$fastcgi_script_name;
-    #     # fastcgi_param PATH_INFO $fastcgi_path_info;
-	# 	# include	fastcgi_params;
-	# }
+        # try_files $uri =404;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+		fastcgi_param	SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param	PATH_INFO $fastcgi_path_info;
+		include	fastcgi_params;
+	}
 
 	# deny access to .htaccess files, if Apache's document root
 	# concurs with nginx's one
