@@ -59,13 +59,13 @@ ft_wordpress_set()
 {
 	if ! [ -f index.php ]
 	then
-		curl -o wordpress.tar.gz -fL "https://wordpress.org/wordpress-6.2.tar.gz"
+		curl --silent -o wordpress.tar.gz -fL "https://wordpress.org/wordpress-6.2.tar.gz"
 		if ! [ -f wordpress.tar.gz ] 
 		then
 			wordpress_error "No file wordpress.tar.gz"
 			exit 1
 		fi
-		tar -xzf wordpress.tar.gz -C /var/www/html --strip 1 
+		tar -xzvf wordpress.tar.gz -C /var/www/html --strip 1 
 		rm wordpress.tar.gz
 	fi
 	# chown -R www-data:www-data /var/www/html; 
