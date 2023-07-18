@@ -13,9 +13,9 @@ RUN set -eux \
 
 RUN set -eux \
 	&& apt-get update \
-	&& apt-get install -y --no-install-recommends nginx=1.22.*
-    # && ln -sf /dev/stdout /var/log/nginx/access.log \
-    # && ln -sf /dev/stderr /var/log/nginx/error.log;
+	&& apt-get install -y --no-install-recommends nginx=1.22.* \
+    && ln -sf /dev/stdout /var/log/nginx/access.log \
+    && ln -sf /dev/stderr /var/log/nginx/error.log;
 	# && update-rc.d -f nginx disable;
 
 COPY ./conf/default /etc/nginx/sites-available/default
