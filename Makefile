@@ -151,6 +151,4 @@ else
 	@echo "\033[38;5;048m[docker-compose_up_nodaemonize]\033[0m: docker-compose start running";
 
 	$(shell docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml up);
-	docker rm $(shell docker ps --filter status=exited -q);
-	
 endif
