@@ -84,30 +84,30 @@ $(VOLUME_WORDPRESS):
 	@echo "\033[38;5;047m[VOLUME_WORDPRESS]\033[0m: volume mkdir $(VOLUME_WORDPRESS)";
 	
 docker-compose_up : $(VOLUME_MARIADB) $(VOLUME_WORDPRESS) $(DOCKER_42_IMAGE)
-	@if [ $(WHOAMI) = root ]; \
-	then \
-		if ! [ -f $(DOCKER_COMPOSE_RUN) ]; \
-		then \
-			touch $(DOCKER_COMPOSE_RUN); \
-			docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml up -d; \
-			echo "\033[38;5;048m[docker-compose_up]\033[0m: docker-compose start running"; \
-		else echo "\033[38;5;202m[docker-compose_up]\033[0m: docker-compose is all ready running"; \
-		fi; \
-	else echo "\033[38;5;196m[docker-compose_up]\033[0m: $(WHOAMI) is not root"; \
-	fi;
+ifneq ( "$(WHOAMI)", "root" )
+	@echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not root";
+else
+  ifneq ($(shell test -e $(DOCKER_COMPOSE_RUN) && echo -n yes), yes)
+	docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml up -d;
+	touch $(DOCKER_COMPOSE_RUN);
+	@echo "\033[38;5;048m[docker-compose_up]\033[0m: docker-compose start running";
+  else
+	@echo "\033[38;5;202m[docker-compose_up]\033[0m: docker-compose is all ready running";
+  endif
+endif
 
 docker-compose_down : 
-	@if [ $(WHOAMI) = root ]; \
-	then \
-		if [ -f $(DOCKER_COMPOSE_RUN) ]; \
-		then \
-			docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml down; \
-			rm $(DOCKER_COMPOSE_RUN); \
-		else echo "\033[38;5;160m[docker-compose_down]\033[0m: docker-compose is not running"; \
-		fi; \
-		echo "\033[38;5;160m[docker-compose_down]\033[0m: docker-compose down"; \
-	else echo "\033[38;5;196m[docker-compose_down]\033[0m: $(WHOAMI) is not root"; \
-	fi
+ifneq ( "$(WHOAMI)", "root" )
+	@echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not root";
+else
+  ifneq ($(shell test -e $(DOCKER_COMPOSE_RUN) && echo -n yes), yes)
+	docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml down;
+	rm $(DOCKER_COMPOSE_RUN);
+	@echo "\033[38;5;160m[docker-compose_down]\033[0m: docker-compose down";
+  else
+	@echo "\033[38;5;160m[docker-compose_down]\033[0m: docker-compose is not running";
+  endif
+endif
 
 docker-compose_ps :
 ifneq ( "$(WHOAMI)", "root" )
@@ -121,29 +121,13 @@ docker-compose_clean : docker-compose_down
 ifneq ( "$(WHOAMI)", "root" )
 	@echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not root";
 else
-	ifneq ($(shell test -e $(DOCKER_42_IMAGE) && echo -n yes), yes)
-	else
-	endif
-	if [ -f $(DOCKER_42_IMAGE) ]; \
-	then \
-		docker rmi nginx:42 mariadb:42 wordpress:42; \
-		rm $(DOCKER_42_IMAGE); \
-		echo "\033[38;5;189m[docker-compose_clean]\033[0m: docker-compose images clear"; \
-	else echo "\033[38;5;189m[docker-compose_clean]\033[0m: all ready rmi docker-compose 42 images "; \
-	fi;
+  ifneq ($(shell test -e $(DOCKER_42_IMAGE) && echo -n yes), yes)
+	docker rmi nginx:42 mariadb:42 wordpress:42 && rm $(DOCKER_42_IMAGE);
+	@echo "\033[38;5;189m[docker-compose_clean]\033[0m: docker-compose images clear";
+  else
+	@echo "\033[38;5;189m[docker-compose_clean]\033[0m: all ready rmi docker-compose 42 images ";
+  endif
 endif
-
-	@if [ $(WHOAMI) = root ]; \
-	then \
-		if [ -f $(DOCKER_42_IMAGE) ]; \
-		then \
-			docker rmi nginx:42 mariadb:42 wordpress:42; \
-			rm $(DOCKER_42_IMAGE); \
-			echo "\033[38;5;189m[docker-compose_clean]\033[0m: docker-compose images clear"; \
-		else echo "\033[38;5;189m[docker-compose_clean]\033[0m: all ready rmi docker-compose 42 images "; \
-		fi; \
-	else echo "\033[38;5;196m[docker-compose_clean]\033[0m: $(WHOAMI) is not root"; \
-	fi
 
 docker-compose_fclean : docker-compose_clean
 ifneq ( "$(WHOAMI)", "root" )
