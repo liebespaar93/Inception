@@ -65,7 +65,7 @@ ft_wordpress_set()
 			wordpress_error "No file wordpress.tar.gz"
 			exit 1
 		fi
-		tar -xzvf wordpress.tar.gz -C /var/www/wordpress --strip 1 
+		tar -xzf wordpress.tar.gz -C /var/www/wordpress --strip 1 
 		rm wordpress.tar.gz
 	fi
 	chown -R www-data /var/www/wordpress; 
