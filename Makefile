@@ -135,6 +135,7 @@ ifneq "$(WHOAMI)" "root"
 else
 	@if [ -d $(VOLUME_MARIADB) ]; then rm -rf $(VOLUME_MARIADB); fi;
 	@if [ -d $(VOLUME_WORDPRESS) ]; then rm -rf $(VOLUME_WORDPRESS); fi;
+	docker rm $(docker ps --filter status=exited -q);
 	@echo "\033[38;5;051m[docker-compose_fclean]\033[0m: docker-compose vloume data clear";
 endif
 
@@ -150,5 +151,6 @@ else
 	@echo "\033[38;5;048m[docker-compose_up_nodaemonize]\033[0m: docker-compose start running";
 
 	$(shell docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml up);
+	docker rm $(docker ps --filter status=exited -q);
 	
 endif
