@@ -63,7 +63,7 @@ docker_install : set_docker_apt $(DOCKER_INSTALL_CHECKER) docker-compose_install
 	@echo "\033[38;5;047m[docker_install]\033[0m: docker_install install"
 
 unset_docker :
-	@echo "\033[38;5;196m[unset_docker]\033[0m: unset_docker unset"
+	@echo "\033[38;5;196m[unset_docker]\033[0m: unset_docker unset";
 	@if [ -f ./$(DOCKER_APT_CHECKER) ]; then rm $(DOCKER_APT_CHECKER); fi; \
 	@if [ -f ./$(DOCKER_INSTALL_CHECKER) ]; then rm $(DOCKER_INSTALL_CHECKER); fi; \
 	@if [ -f ./$(DOCKER_COMPOSE_INSTALL_CHECKER) ]; then rm $(DOCKER_COMPOSE_INSTALL_CHECKER); fi; \
