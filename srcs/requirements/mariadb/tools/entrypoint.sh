@@ -198,6 +198,7 @@ ft_temp_server_start() {
 	fi
 	local i
 	for i in {30..0}; do
+		mysql_note "wait mysqld_safe connect.."
 		if docker_process_sql "${extraArgs[@]}" --database=mysql <<<'SELECT 1' &> /dev/null; then
 			break
 		fi
@@ -246,7 +247,7 @@ _main()
 {
 	mysql_note "entrypoint _main() "
 	# ft_on_mariadb
-	# ft_mariadb_set_env
+	ft_mariadb_set_env
 	# ft_verify_minimum_env
 	# chown -R mysql:mysql /var/lib/mysql /var/run/mysqld;
 	# chown -R root  /var/lib/mysql /var/run/mysqld;
