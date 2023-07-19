@@ -8,7 +8,7 @@ RUN set -eux \
 
 RUN set -eux \
 	&& apt-get update \
-	&& apt-get install -y php8.2-fpm \
+	&& apt-get install -y php8.2-fpm php8.2-mysqli mariadb-client curl libc-dev \
     && ln -sf /dev/stderr /var/log/php8.2-fpm.log
 
 COPY ./conf /conf

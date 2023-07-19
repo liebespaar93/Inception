@@ -35,6 +35,7 @@ ft_php-fpm_set()
 		exit 1;
 	fi
 	cp /conf/www.conf /etc/php/8.2/fpm/pool.d/www.conf
+	chmod +x /etc/php/8.2/fpm/pool.d/www.conf
 	wordpress_ready "www.conf Copy Done";
 
 	if ! [ -f /etc/php/8.2/fpm/php-fpm.conf ] || ! [ -f /conf/php-fpm.conf ]
@@ -43,6 +44,7 @@ ft_php-fpm_set()
 		exit 1;
 	fi
 	cp /conf/php-fpm.conf /etc/php/8.2/fpm/php-fpm.conf
+	chmod +x /etc/php/8.2/fpm/php-fpm.conf
 	wordpress_ready "php-fpm.conf Copy Done";
 
 	if ! [ -f /etc/php/8.2/fpm/php.ini ] || ! [ -f /conf/php.ini ]
@@ -51,7 +53,17 @@ ft_php-fpm_set()
 		exit 1;
 	fi
 	cp /conf/php.ini /etc/php/8.2/fpm/php.ini
-	wordpress_ready "php.ini Copy Done";
+	chmod +x /etc/php/8.2/fpm/php.ini
+	wordpress_ready "fpm php.ini Copy Done";
+
+	if ! [ -f /etc/php/8.2/cli/php.ini ] || ! [ -f /conf/php.ini ]
+	then
+		wordpress_error "php.ini not found"
+		exit 1;
+	fi
+	cp /conf/php.ini /etc/php/8.2/cli/php.ini
+	chmod +x /etc/php/8.2/cli/php.ini
+	wordpress_ready "cli php.ini Copy Done";
 
 }
 
@@ -59,24 +71,27 @@ ft_wordpress_set()
 {
 	if ! [ -f index.php ]
 	then
+		wordpress_note "download https://wordpress.org/wordpress-6.2.tar.gz"
 		curl --silent -o wordpress.tar.gz -fL "https://wordpress.org/wordpress-6.2.tar.gz"
 		if ! [ -f wordpress.tar.gz ] 
 		then
 			wordpress_error "No file wordpress.tar.gz"
 			exit 1
 		fi
+		wordpress_note "tar wordpress.tar.gz"
 		tar -xzf wordpress.tar.gz -C /var/www/wordpress --strip 1 
 		rm wordpress.tar.gz
 	fi
 	chown -R www-data /var/www/wordpress; 
-	chown -R 775 /var/www/wordpress; 
-	chown -R www-data:www-data wp-content;
-	chown -R www-data:www-data /var/www/wordpress
+	chmod -R 775 /var/www/wordpress; 
 	wordpress_note "chown -R www-data:www-data /var/www/wordpress"
-	chown -R www-data:www-data wp-content
-	wordpress_note "chown -R www-data:www-data wp-content"
+	chown -R www-data:www-data wp-content;
 	chmod -R 1777 wp-content
+	wordpress_note "chown -R www-data:www-data wp-content"
 	wordpress_note "chmod -R 1777 wp-content"
+	chown -R www-data /usr/lib/php
+	chmod -R 1777 /usr/lib/php/20220829/mysqli.so
+
 	wordpress_ready "All ready wordpress"
 }
 
@@ -88,8 +103,10 @@ ft_web_config_set()
 		exit 1;
 	fi
 	cp /conf/wp-config.php /var/www/wordpress/wp-config.php
+	chmod +x /var/www/wordpress/wp-config.php
 	wordpress_ready "config.php Copy Done";
 }
+
 _main()
 {
 	ft_php-fpm_set

@@ -51,18 +51,24 @@ fi
 
 ft_on_mariadb()
 {
-	if ! [ -f /etc/init.d/mariadb ]
-	then
-		mysql_error "mariadb install fail"
-		exit 1;
-	fi
 	if ! [ -f /etc/mysql/mariadb.conf.d/50-server.cnf ] || ! [ -f /conf/50-server.cnf ]
 	then
 		mysql_error "50-server.cnf not found"
 		exit 1;
 	fi
 	cp /conf/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
+	chmod +x /etc/mysql/mariadb.conf.d/50-server.cnf
 	mysql_ready "50-server.cnf -> /etc/mysql/mariadb.conf.d/50-server.cnf"
+
+	if ! [ -f /etc/mysql/mariadb.cnf ] || ! [ -f /conf/mariadb.cnf ]
+	then
+		mysql_error "mariadb.cnf not found"
+		exit 1;
+	fi
+	cp /conf/mariadb.cnf /etc/mysql/mariadb.cnf
+	chmod +x /etc/mysql/mariadb.cnf
+	mysql_ready "/conf/mariadb.cnf -> etc/mysql/mariadb.cnf"
+
 
 	if ! [ -f /etc/mysql/my.cnf ] || ! [ -f /conf/my.cnf ]
 	then
@@ -70,15 +76,8 @@ ft_on_mariadb()
 		exit 1;
 	fi
 	cp /conf/my.cnf /etc/mysql/my.cnf
+	chmod +x /etc/mysql/my.cnf
 	mysql_ready "/conf/my.cnf -> etc/mysql/my.cnf"
-
-	if ! [ -f /etc/mysql/conf.d/mysql.cnf ] || ! [ -f /conf/mysql.cnf ]
-	then
-		mysql_error "mysql.cnf not found"
-		exit 1;
-	fi
-	cp /conf/mysql.cnf /etc/mysql/conf.d/mysql.cnf 
-	mysql_ready "/conf/mysql.cnf -> /etc/mysql/conf.d/mysql.cnf"
 
 }
 
@@ -186,7 +185,7 @@ docker_process_sql() {
 ft_temp_server_start() {
 	# mysql_note "Starting MariaDB database server: mariadb"
 	# service mariadb start > /dev/null
- 	mysqld_safe --skip-networking --default-time-zone=SYSTEM --socket="${SOCKET}" --wsrep_on=OFF --expire-logs-days=0 \
+ 	mysqld_safe -uroot --skip-networking --default-time-zone=SYSTEM --socket="${SOCKET}" --wsrep_on=OFF --expire-logs-days=0 \
 		--loose-innodb_buffer_pool_load_at_startup=0 \
 		& declare -g MARIADB_PID 
 	MARIADB_PID=$!
@@ -248,6 +247,9 @@ _main()
 	ft_on_mariadb
 	ft_mariadb_set_env
 	ft_verify_minimum_env
+	chown -R mysql /var/lib/mysql /var/run/mysqld;
+	chown -R root  /var/lib/mysql /var/run/mysqld;
+	chmod 777 /var/run/mysqld;
 	ft_temp_server_start
 	ft_set_database
 	ft_temp_server_stop

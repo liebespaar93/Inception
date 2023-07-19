@@ -65,6 +65,10 @@ REQUEST_METHOD=GET \
 cgi-fcgi -bind -connect 127.0.0.1:9000
 
 
-#network 확인
+# network 확인
 apt install net-tools
 sudo netstat -ltup
+
+
+# socket 확인
+socat - UNIX-CONNECT:/run/mysqld/mysqld.sock

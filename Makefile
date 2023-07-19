@@ -12,6 +12,7 @@ DOCKER_42_IMAGE=docker_42_image.conf
 VOLUME_MARIADB=$(ROOTDIR)/srcs/requirements/mariadb/volume
 VOLUME_WORDPRESS=$(ROOTDIR)/srcs/requirements/wordpress/volume
 
+ROOT  := kyoulee
 WHOAMI    := $(shell whoami)
 
 all : 
@@ -84,8 +85,8 @@ $(VOLUME_WORDPRESS):
 	@echo "\033[38;5;047m[VOLUME_WORDPRESS]\033[0m: volume mkdir $(VOLUME_WORDPRESS)";
 	
 docker-compose_up : $(VOLUME_MARIADB) $(VOLUME_WORDPRESS) $(DOCKER_42_IMAGE)
-ifneq "root" "root"
-	@echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not root";
+ifneq "$(WHOAMI)" "$(ROOT)"
+	@echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not $(ROOT)";
 else
 	@if ! [ -f $(DOCKER_COMPOSE_RUN) ]; then \
 		docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml up -d; \
@@ -97,8 +98,8 @@ else
 endif
 
 docker-compose_down : 
-ifneq "$(WHOAMI)" "root"
-	@echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not root";
+ifneq "$(WHOAMI)" "$(ROOT)"
+	@echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not $(ROOT)";
 else
 	@if [ -f $(DOCKER_COMPOSE_RUN) ]; then \
 		docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml down; \
@@ -110,16 +111,16 @@ else
 endif
 
 docker-compose_ps :
-ifneq "$(WHOAMI)" "root"
-	@echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not root";
+ifneq "$(WHOAMI)" "$(ROOT)"
+	@echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not $(ROOT)";
 else
 	docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml ps;
 	@echo "\033[38;5;226m[docker-compose_ps]\033[0m: docker-compose ps";
 endif
 
 docker-compose_clean : docker-compose_down
-ifneq "$(WHOAMI)" "root"
-	@echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not root";
+ifneq "$(WHOAMI)" "$(ROOT)"
+	@echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not $(ROOT)";
 else
 	@if [ -f $(DOCKER_42_IMAGE) ]; then \
 		docker rm $(shell docker ps --filter status=exited -q); \
@@ -131,8 +132,8 @@ else
 endif
 
 docker-compose_fclean : docker-compose_clean
-ifneq "$(WHOAMI)" "root"
-	@echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not root";
+ifneq "$(WHOAMI)" "$(ROOT)"
+	@echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not $(ROOT)";
 else
 	@if [ -d $(VOLUME_MARIADB) ]; then rm -rf $(VOLUME_MARIADB); fi;
 	@if [ -d $(VOLUME_WORDPRESS) ]; then rm -rf $(VOLUME_WORDPRESS); fi;
@@ -145,8 +146,8 @@ docker-compose_re : docker-compose_fclean
 
 
 docker-compose_up_nodaemonize :  $(VOLUME_MARIADB) $(VOLUME_WORDPRESS) $(DOCKER_42_IMAGE)
-ifneq "$(WHOAMI)" "root"
-	@echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not root";
+ifneq "$(WHOAMI)" "$(ROOT)"
+	@echo "\033[38;5;196m[docker-compose_up_nodaemonize]\033[0m: $(WHOAMI) is not $(ROOT)";
 else
 	@echo "\033[38;5;048m[docker-compose_up_nodaemonize]\033[0m: docker-compose start running";
 	docker-compose -f $(ROOTDIR)/srcs/docker-compose.yml up;
