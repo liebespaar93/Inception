@@ -42,7 +42,7 @@ services:
       - v-wordpress:/var/www/wordpress
     depends_on:
       - mariadb
-      - wordpress
+      # - wordpress
 
 
   
