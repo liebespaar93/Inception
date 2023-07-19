@@ -13,19 +13,19 @@ services:
     env_file:
       - .env
 
-  wordpress:
-    build: ./requirements/wordpress/.
-    image: wordpress:42
-    container_name: wordpress
-    hostname: wordpress
-    env_file:
-      - .env
-    networks:
-      - net
-    volumes:
-      - v-wordpress:/var/www/wordpress
-    depends_on:
-      - mariadb
+  # wordpress:
+  #   build: ./requirements/wordpress/.
+  #   image: wordpress:42
+  #   container_name: wordpress
+  #   hostname: wordpress
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - net
+  #   volumes:
+  #     - v-wordpress:/var/www/wordpress
+  #   depends_on:
+  #     - mariadb
 
   nginx:
     build: ./requirements/nginx/.
