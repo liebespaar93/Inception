@@ -30,7 +30,7 @@ define( 'DB_USER', 'kyoulee');
 define( 'DB_PASSWORD', '0000');
 
 /** Database hostname */
-define( 'DB_HOST', 'mariadb');
+define( 'DB_HOST', 'localhost:<strong>3306');
 
 /** Database charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8' );
@@ -38,14 +38,7 @@ define( 'DB_CHARSET', 'utf8' );
 /** The database collate type. Don't change this if in doubt. */
 define( 'DB_COLLATE', '' );
 
-//** Redis cache settings. */
-// define('WP_CACHE', true);
-// define('WP_CACHE_KEY_SALT', 'kyoulee.42.fr');
-
-// //** Try Redis container */
-	
-// define('WP_ALLOW_REPAIR', true);
-
+define( 'WP_SITEURL', 'https://kyoulee.42.fr/' );
 
 
 /**#@+
