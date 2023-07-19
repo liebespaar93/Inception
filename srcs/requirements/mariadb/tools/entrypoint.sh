@@ -138,8 +138,8 @@ ft_mariadb_set_env() {
 	_mariadb_file_env 'MYSQL_ROOT_PASSWORD'
 
 	# env variables related to master
-	file_env 'MARIADB_MASTER_HOST'
-	file_env 'MARIADB_MASTER_PORT' 3306
+	# file_env 'MARIADB_MASTER_HOST'
+	# file_env 'MARIADB_MASTER_PORT' 3306
 }
 
 ft_verify_minimum_env() {
