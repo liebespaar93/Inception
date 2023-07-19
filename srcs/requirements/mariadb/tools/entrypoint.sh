@@ -253,7 +253,7 @@ _main()
 	# chown -R root  /var/lib/mysql /var/run/mysqld;
 	# chmod 777 /var/run/mysqld;
 	ft_temp_server_start
-	# ft_set_database
+	ft_set_database
 	ft_temp_server_stop
 	mysql_ready "mysql health check done!"
 	mysql_service "mysql start gosu mysql mysqld_safe server on"
