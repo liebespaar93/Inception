@@ -12,7 +12,7 @@ DOCKER_42_IMAGE=docker_42_image.conf
 VOLUME_MARIADB=$(ROOTDIR)/srcs/requirements/mariadb/volume
 VOLUME_WORDPRESS=$(ROOTDIR)/srcs/requirements/wordpress/volume
 
-ROOT	= root
+ROOT	= kyoulee
 WHOAMI	= $(shell whoami)
 
 all : 
@@ -22,6 +22,8 @@ $(NAMESERVER):
 	@if [ -f /usr/bin/sudo ];\
 	then \
 		sudo echo "nameserver 8.8.8.8" >> /etc/resolv.conf; \
+		sudo echo "nameserver 8.8.8.8" >> /etc/resolv.conf; \
+		sudo echo "127.0.0.1       kyoulee.42.fr" >> /etc/hosts; \
 		touch $(NAMESERVER); \
 	fi
 
@@ -53,7 +55,8 @@ set_resolv : $(NAMESERVER)
 
 unset_reslov :
 	@if [ -f ./$(NAMESERVER) ]; then rm $(NAMESERVER); fi
-	$(shell (sed '/nameserver 8.8.8.8/d' /etc/resolv.conf) | cat > temp; cp temp /etc/resolv.conf ; rm temp)
+	$(shell (sed '/127.0.0.1       kyoulee.42.fr/d' /etc/hosts) | cat > temp; cp temp /etc/hosts ; rm temp);
+	$(shell (sed '/nameserver 8.8.8.8/d' /etc/resolv.conf) | cat > temp; cp temp /etc/resolv.conf ; rm temp);
 
 set_docker_apt : set_resolv  $(DOCKER_APT_CHECKER)
 	@echo "\033[38;5;047m[docker_apt]\033[0m: set_docker_apt setting"

@@ -72,3 +72,6 @@ sudo netstat -ltup
 
 # socket 확인
 socat - UNIX-CONNECT:/run/mysqld/mysqld.sock
+
+
+https://localhost/

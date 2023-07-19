@@ -30,7 +30,7 @@ define( 'DB_USER', 'kyoulee');
 define( 'DB_PASSWORD', '0000');
 
 /** Database hostname */
-define( 'DB_HOST', 'mariadb:/var/run/mysqld/mysqld.sock' );
+define( 'DB_HOST', 'mariadb' );
 
 /** Database charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8' );
@@ -38,7 +38,6 @@ define( 'DB_CHARSET', 'utf8' );
 /** The database collate type. Don't change this if in doubt. */
 define( 'DB_COLLATE', '' );
 
-define( 'WP_SITEURL', 'https://kyoulee.42.fr/' );
 
 
 /**#@+

@@ -46,7 +46,7 @@ server {
 	# Add index.php to the list if you are using PHP
     index index.php;
 
-	server_name kyoulee.42.kr;
+	server_name kyoulee.42.fr;
 
 	location / {
 		# First attempt to serve request as file, then
