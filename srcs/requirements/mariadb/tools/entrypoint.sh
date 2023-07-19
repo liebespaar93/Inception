@@ -205,6 +205,7 @@ ft_temp_server_start() {
 	done
 	if [ "$i" = 0 ]; then
 		mysql_error "Unable to start server."
+		exit 1
 	fi
 
 	mysql_service "[PID $MARIADB_PID] temp server Done Connect server ON"

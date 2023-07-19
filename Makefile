@@ -12,8 +12,8 @@ DOCKER_42_IMAGE=docker_42_image.conf
 VOLUME_MARIADB=$(ROOTDIR)/srcs/requirements/mariadb/volume
 VOLUME_WORDPRESS=$(ROOTDIR)/srcs/requirements/wordpress/volume
 
-ROOT  := root
-WHOAMI    := $(shell whoami)
+ROOT	= root
+WHOAMI	= $(shell whoami)
 
 all : 
 
