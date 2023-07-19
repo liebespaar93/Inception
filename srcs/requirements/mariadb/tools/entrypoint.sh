@@ -244,9 +244,9 @@ _main()
 	# ft_on_mariadb
 	ft_mariadb_set_env
 	ft_verify_minimum_env
-	chown -R mysql /var/lib/mysql /var/run/mysqld;
-	chown -R root  /var/lib/mysql /var/run/mysqld;
-	chmod 777 /var/run/mysqld;
+	# chown -R mysql /var/lib/mysql /var/run/mysqld;
+	# chown -R root  /var/lib/mysql /var/run/mysqld;
+	# chmod 777 /var/run/mysqld;
 	# ft_temp_server_start
 	# ft_set_database
 	# ft_temp_server_stop
