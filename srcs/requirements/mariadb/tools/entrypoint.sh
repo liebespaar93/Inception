@@ -191,14 +191,10 @@ ft_temp_server_start() {
 	MARIADB_PID=$!
 	mysql_ready "[PID $MARIADB_PID] temp server Ready"
 	mysql_note "Waiting for server startup"
-	extraArgs=()
-	if [ -z "$DATABASE_ALREADY_EXISTS" ]; then
-		extraArgs+=( '--dont-use-mysql-root-password' )
-	fi
 	local i
-	for i in {30..0}; do
+	for i in {20..0}; do
 		mysql_note "wait mysqld_safe connect.."
-		if docker_process_sql "${extraArgs[@]}" --database=mysql <<<'SELECT 1' &> /dev/null; then
+		if docker_process_sql --dont-use-mysql-root-password --database=mysql <<<'SELECT 1' &> /dev/null; then
 			break
 		fi
 		sleep 1
