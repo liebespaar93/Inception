@@ -82,7 +82,7 @@ ft_wordpress_set()
 		tar -xzf wordpress.tar.gz -C /var/www/wordpress --strip 1 
 		rm wordpress.tar.gz
 	fi
-	chown -R www-data /var/www/wordpress; 
+	chown -R www-data:www-data /var/www/wordpress; 
 	chmod -R 775 /var/www/wordpress; 
 	wordpress_note "chown -R www-data:www-data /var/www/wordpress"
 	chown -R www-data:www-data wp-content;
