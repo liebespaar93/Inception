@@ -30,7 +30,7 @@ define( 'DB_USER', 'kyoulee');
 define( 'DB_PASSWORD', '0000');
 
 /** Database hostname */
-define( 'DB_HOST', 'mariadb:<strong>/var/run/mysqld/mysqld.sock' );
+define( 'DB_HOST', 'mariadb:/var/run/mysqld/mysqld.sock' );
 
 /** Database charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8' );
