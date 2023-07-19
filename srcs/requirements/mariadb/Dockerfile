@@ -15,8 +15,6 @@ RUN set -eux \
 
 VOLUME /var/lib/mysql
 
-EXPOSE 3306
-
 COPY ./tools/. /tools/.
 COPY ./conf/. /conf/.
 

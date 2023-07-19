@@ -241,7 +241,7 @@ ft_set_database() {
 _main()
 {
 	mysql_note "entrypoint _main() "
-	ft_on_mariadb
+	# ft_on_mariadb
 	ft_mariadb_set_env
 	ft_verify_minimum_env
 	chown -R mysql /var/lib/mysql /var/run/mysqld;
