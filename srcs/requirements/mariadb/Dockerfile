@@ -18,7 +18,7 @@ VOLUME /var/lib/mysql
 COPY ./tools/. /tools/.
 COPY ./conf/. /conf/.
 
-# RUN chmod +x /tools/entrypoint.sh
-# ENTRYPOINT [ "/tools/entrypoint.sh" ]
-CMD ["tail", "-f", "/dev/null"]
-# CMD ["gosu", "mysql", "mysqld_safe"]
+RUN chmod +x /tools/entrypoint.sh
+ENTRYPOINT [ "/tools/entrypoint.sh" ]
+# CMD ["tail", "-f", "/dev/null"]
+CMD ["gosu", "mysql", "mysqld_safe"]
