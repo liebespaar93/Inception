@@ -171,7 +171,7 @@ ft_verify_minimum_env() {
 ######
 
 ft_sql_exec_client() {
-	mysql --protocol=socket -uroot -hlocalhost --socket="${SOCKET}" "$@"
+	mariadb --protocol=socket -uroot -hlocalhost --socket="${SOCKET}" "$@"
 }
 
 docker_process_sql() {
@@ -227,7 +227,7 @@ ft_set_database() {
 
 	mysql_note "docker_setup_db"
 	docker_process_sql <<-EOSQL
-	CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED WITH mysql_native_password BY '$MYSQL_PASSWORD';
+	CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';
 	GRANT ALL PRIVILEGES ON  *.* TO '$MYSQL_USER'@'%' WITH GRANT OPTION;
 	EOSQL
 	mysql_ready "'$MYSQL_USER'@'%' user Created $MYSQL_PASSWORD"
