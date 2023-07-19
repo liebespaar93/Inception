@@ -11,7 +11,6 @@ RUN set -eux \
 	&& apt-get install -y \
 	wget \
 	curl \
-	php8.2 \
 	php8.2-fpm \
 	php8.2-mysqli \
 	php8.2-curl \
