@@ -171,7 +171,7 @@ ft_verify_minimum_env() {
 ######
 
 ft_sql_exec_client() {
-	mysql --protocol=socket -uroot -hlocalhost --socket="${SOCKET}" "$@"
+	mariadb --protocol=socket -uroot -hlocalhost --socket="${SOCKET}" "$@"
 }
 
 docker_process_sql() {
