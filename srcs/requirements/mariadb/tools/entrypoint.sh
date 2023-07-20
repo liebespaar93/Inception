@@ -232,7 +232,7 @@ ft_set_database() {
 		CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';
 		GRANT ALL PRIVILEGES ON  *.* TO '$MYSQL_USER'@'%' WITH GRANT OPTION;
 		EOSQL;
-		mysql_ready "if not exists '$MYSQL_USER'@'%' user Created  $MYSQL_PASSWORD";
+		mysql_ready "if not exists '$MYSQL_USER'@'%' user Created  $MYSQL_PASSWORD"
 	fi
 
 
