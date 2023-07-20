@@ -226,15 +226,12 @@ ft_temp_server_stop() {
 ft_set_database() {
 
 	mysql_note "docker_setup_db"
-
-	if [ -z $(docker_process_sql --database=mysql << 'select * from user where User="kyoulee"') ]; then
-		docker_process_sql <<-EOSQL
-		CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';
-		GRANT ALL PRIVILEGES ON  *.* TO '$MYSQL_USER'@'%' WITH GRANT OPTION;
-		EOSQL
-		mysql_error "if not exists '$MYSQL_USER'@'%' user Created  $MYSQL_PASSWORD"
-	fi
-
+	
+	docker_process_sql <<-EOSQL
+	CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';
+	GRANT ALL PRIVILEGES ON  *.* TO '$MYSQL_USER'@'%' WITH GRANT OPTION;
+	EOSQL
+	mysql_ready "if not exists '$MYSQL_USER'@'%' user Created  $MYSQL_PASSWORD"
 
 	docker_process_sql <<-EOSQL
 	CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;
