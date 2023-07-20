@@ -243,7 +243,10 @@ ft_set_database() {
 	EOSQL
 	mysql_ready "'root'@'localhost' user change password $MYSQL_ROOT_PASSWORD"
 
-	docker_process_sql wordpress < /conf/wordpress_backup.sql
+	if ! [ docker_process_sql --database=wordpress <<<'SELECT 1' &> /dev/null ] ; then
+		docker_process_sql wordpress < /conf/wordpress_backup.sql
+	fi
+	
 	mysql_ready "wordpress_backup"
 }
 _main()
