@@ -238,7 +238,7 @@ ft_set_database() {
 	mysql_ready "create database $MYSQL_DATABASE"
 	local len = $(shell "docker_process_sql << -EOSQL SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = 'wordpress'");
 	mysql_ready $len;
-	if [   ] ; then
+	if [ $len ] ; then
 		docker_process_sql wordpress < /conf/wordpress_backup.sql
 		mysql_ready "wordpress_backup /conf/wordpress_backup.sql "
 		rm  /conf/wordpress_backup.sql
