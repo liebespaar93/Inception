@@ -245,9 +245,8 @@ ft_set_database() {
 
 	if ! [ docker_process_sql --database=wordpress <<<'SELECT 1' &> /dev/null ] ; then
 		docker_process_sql wordpress < /conf/wordpress_backup.sql
+		mysql_ready "wordpress_backup"
 	fi
-	
-	mysql_ready "wordpress_backup"
 }
 _main()
 {
