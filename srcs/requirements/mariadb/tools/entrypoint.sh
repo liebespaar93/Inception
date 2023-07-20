@@ -231,7 +231,7 @@ ft_set_database() {
 		docker_process_sql <<-EOSQL
 		CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';
 		GRANT ALL PRIVILEGES ON  *.* TO '$MYSQL_USER'@'%' WITH GRANT OPTION;
-		EOSQL
+		EOSQL;
 		mysql_ready "if not exists '$MYSQL_USER'@'%' user Created  $MYSQL_PASSWORD";
 	fi
 
