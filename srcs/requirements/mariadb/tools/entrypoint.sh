@@ -233,11 +233,6 @@ ft_set_database() {
 	mysql_ready "'$MYSQL_USER'@'%' user Created $MYSQL_PASSWORD"
 
 	docker_process_sql <<-EOSQL
-	CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;
-	EOSQL
-	mysql_ready "create database $MYSQL_DATABASE"
-
-	docker_process_sql <<-EOSQL
 	set password for 'root'@'localhost' = PASSWORD('$MYSQL_ROOT_PASSWORD');
 	flush privileges;
 	EOSQL
