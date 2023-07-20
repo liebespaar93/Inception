@@ -17,6 +17,7 @@ git clone https://github.com/liebespaar93/Inception.git
 make docker-install
 make docker-compose_up_nodaemonize
 
+
 # 3. 인터넷 설정
  /etc/resolv.conf 변경
 nameserver 10.51.1.253 -> nameserver 8.8.8.8
