@@ -233,16 +233,22 @@ ft_set_database() {
 	mysql_ready "'$MYSQL_USER'@'%' user Created $MYSQL_PASSWORD"
 
 	docker_process_sql <<-EOSQL
-	set password for 'root'@'localhost' = PASSWORD('$MYSQL_ROOT_PASSWORD');
-	flush privileges;
+	CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;
 	EOSQL
-	mysql_ready "'root'@'localhost' user change password $MYSQL_ROOT_PASSWORD"
+	mysql_ready "create database $MYSQL_DATABASE"
 
 	if [ -f  /conf/wordpress_backup.sql ] ; then
 		docker_process_sql wordpress < /conf/wordpress_backup.sql
 		mysql_ready "wordpress_backup /conf/wordpress_backup.sql "
 		rm  /conf/wordpress_backup.sql
 	fi
+
+	docker_process_sql <<-EOSQL
+	set password for 'root'@'localhost' = PASSWORD('$MYSQL_ROOT_PASSWORD');
+	flush privileges;
+	EOSQL
+	mysql_ready "'root'@'localhost' user change password $MYSQL_ROOT_PASSWORD"
+
 }
 _main()
 {
