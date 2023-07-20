@@ -14,7 +14,7 @@ apt-get install -y sudo git make
 
 ### makefile 자동화 or 하위 따라가기
 git clone https://github.com/liebespaar93/Inception.git
-make docker-install
+make docker_install
 make docker-compose_up_nodaemonize
 
 
