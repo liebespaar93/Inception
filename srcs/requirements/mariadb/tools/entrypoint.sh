@@ -226,17 +226,21 @@ ft_temp_server_stop() {
 ft_set_database() {
 
 	mysql_note "docker_setup_db"
-	docker_process_sql <<-EOSQL
-	CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';
-	GRANT ALL PRIVILEGES ON  *.* TO '$MYSQL_USER'@'%' WITH GRANT OPTION;
-	EOSQL
-	mysql_ready "'$MYSQL_USER'@'%' user Created $MYSQL_PASSWORD"
+
+	if docker_process_sql "${extraArgs[@]}" --database=mysql 'select * from user where User="kyoulee"' &> /dev/null; then
+		docker_process_sql <<-EOSQL
+		CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';
+		GRANT ALL PRIVILEGES ON  *.* TO '$MYSQL_USER'@'%' WITH GRANT OPTION;
+		EOSQL
+		mysql_ready "if not exists '$MYSQL_USER'@'%' user Created  $MYSQL_PASSWORD"
+	fi
+
 
 	docker_process_sql <<-EOSQL
 	CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;
 	EOSQL
-	mysql_ready "create database $MYSQL_DATABASE"
-	
+	mysql_ready "if not exists create database $MYSQL_DATABASE"
+
 	if [ -f /conf/wordpress_backup.sql ] ; then
 		docker_process_sql wordpress < /conf/wordpress_backup.sql
 		mysql_ready "wordpress_backup /conf/wordpress_backup.sql "
