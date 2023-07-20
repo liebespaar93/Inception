@@ -243,7 +243,7 @@ ft_set_database() {
 	EOSQL
 	mysql_ready "'root'@'localhost' user change password $MYSQL_ROOT_PASSWORD"
 
-	mariadb < /conf/wordpress_backup.sql
+	docker_process_sql wordpress < /conf/wordpress_backup.sql
 	mysql_ready "wordpress_backup"
 }
 _main()
