@@ -19,43 +19,24 @@
  * @package WordPress
  */
 
-
-if (!function_exists('getenv_docker')) {
-	// https://github.com/docker-library/wordpress/issues/588 (WP-CLI will load this file 2x)
-	function getenv_docker($env, $default) {
-		if ($fileEnv = getenv($env . '_FILE')) {
-			return rtrim(file_get_contents($fileEnv), "\r\n");
-		}
-		else if (($val = getenv($env)) !== false) {
-			return $val;
-		}
-		else {
-			return $default;
-		}
-	}
-}
-
-
 // ** Database settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define( 'DB_NAME', getenv_docker('WORDPRESS_DB_NAME', 'wordpress'));
+define( 'DB_NAME', 'wordpress' );
 
 /** Database username */
-define( 'DB_USER',  getenv_docker('WORDPRESS_DB_USER', 'kyoulee'));
+define( 'DB_USER', 'kyoulee' );
 
 /** Database password */
-define( 'DB_PASSWORD',  getenv_docker('WORDPRESS_DB_PASSWORD', '0000'));
+define( 'DB_PASSWORD', '0000' );
 
 /** Database hostname */
-define( 'DB_HOST', getenv_docker('WORDPRESS_DB_HOST', 'mysql') );
+define( 'DB_HOST', 'mariadb' );
 
 /** Database charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8' );
 
 /** The database collate type. Don't change this if in doubt. */
 define( 'DB_COLLATE', '' );
-
-
 
 /**#@+
  * Authentication unique keys and salts.
@@ -68,14 +49,15 @@ define( 'DB_COLLATE', '' );
  *
  * @since 2.6.0
  */
-define('AUTH_KEY',         getenv_docker('WORDPRESS_AUTH_KEY', 'C2Sm;~khG@qKubV|/dB+Tk--7(Cp9A,PXSW:ac~+)cOGJNZ9Sd[BV]KK-c>p+y}a'));
-define('SECURE_AUTH_KEY',  getenv_docker('WORDPRESS_SECURE_AUTH_KEY',  'rfa0@cf~x:0xQd,tach?wj~VaO5oTQl@=W#<Xn#ZAo~mup1W:X xvr{QK@7>B9:E'));
-define('LOGGED_IN_KEY',    getenv_docker('WORDPRESS_LOGGED_IN_KEY',    'wGjRc)lKp-BPQS77d|rLSXc mwsdUMO^<Il93lL&6zwaT!/t{H~G|Becwj<F<61Y'));
-define('NONCE_KEY',        getenv_docker('WORDPRESS_NONCE_KEY',        '92<^lZ>r*!13fon@-o5AEt`3p&!$% EJjH.F$)4jn(3]8#fp3_e2uyxx,2xm_-#E'));
-define('AUTH_SALT',        getenv_docker('WORDPRESS_AUTH_SALT',        'Fzb|p~@K#0Eck(t,ma7aTO[:y4/V|@wOOA6kJ/C8VuK,l}J]_c){;5nF>C&c2LT|'));
-define('SECURE_AUTH_SALT', getenv_docker('WORDPRESS_SECURE_AUTH_SALT', 'PYC+,4<_{j|mJvTUR+-kV(4RiS7v;,Zbw7qWD;ZeI4XWCjBos8hCt!}?aWwb%}@8'));
-define('LOGGED_IN_SALT',   getenv_docker('WORDPRESS_LOGGED_IN_SALT',   '(uU8kOW!c1u 3Ti_LGl+#RGN}rSE-#-Yl]JA(7QV2Cj(x5S/Ww?**dSy?37[r|W%'));
-define('NONCE_SALT',       getenv_docker('WORDPRESS_NONCE_SALT',       'q,) wQ^%C;Py~1K,*-G`QySg^|Q6wF&N<b*#?|C8;BlH=(U:Dt=&<Pu:<gtG!v4i'));
+define('AUTH_KEY',         '.}|5=KcX*r+/)&c<gB[1a+E|/`6ORRkg?=>@hi+I-N.&#I._`:Jy36J~=s/:sG%F');
+define('SECURE_AUTH_KEY',  'c.@2{<bqqBw_d|I@ hvoB]L[*1X9X{Uuw!Ap;O|OiJr0;Mkbxrx<;F,S+3w=.Wb%');
+define('LOGGED_IN_KEY',    ',uW&_/w_mz5M-PFEj&J3X{FxgWf>O#V>QPnmr1vm7kg$S(KYa03(H? $ZgIcg`yy');
+define('NONCE_KEY',        'qEPQBtfw?K?K%^1$HfCqdA+f<%0R6#+t_>F#O|Vc|W1*(is1W}u ;&?Rf}e@@-1/');
+define('AUTH_SALT',        'TNwm9iqr(YK7-O6@LG--pkdrA|Y2V^+4lXfU?jd!emyu%3-%A.&l&|eR+$Nuk&Ks');
+define('SECURE_AUTH_SALT', 'WA`/FAAYd~*-6ElZ+xDpn-qLk{7l?i4+Bw-Fsl{:{ey4;~fA|T++:OGQ1&Mcb{tY');
+define('LOGGED_IN_SALT',   'sc~*G2yTbG|tF8pKSV0VHWMtQ=-0HzA/daZO=-v&lk@;yZR3&v]{t*G9JLal{F?^');
+define('NONCE_SALT',       'jMu;>|VS)|@0W)[0hDOU~&GFf;oXAY~7}h_kw8-U/X_.GXFk6!^4KQBBi5@FON~o');
+
 /**#@-*/
 
 /**
@@ -108,7 +90,7 @@ define( 'WP_DEBUG', false );
 
 /** Absolute path to the WordPress directory. */
 if ( ! defined( 'ABSPATH' ) ) {
-        define( 'ABSPATH', __DIR__ . '/' );
+	define( 'ABSPATH', __DIR__ . '/' );
 }
 
 /** Sets up WordPress vars and included files. */

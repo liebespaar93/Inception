@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM debian:bookworm-slim as nginx-kyoulee
+FROM debian:bullseye-slim as nginx-kyoulee
 
 
 RUN set -eux \
@@ -13,7 +13,7 @@ RUN set -eux \
 
 RUN set -eux \
 	&& apt-get update \
-	&& apt-get install -y --no-install-recommends nginx=1.22.* \
+	&& apt-get install -y --no-install-recommends nginx=1.18.* \
     && ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log;
 	# && update-rc.d -f nginx disable;

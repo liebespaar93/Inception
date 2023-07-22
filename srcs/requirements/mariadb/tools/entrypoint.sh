@@ -32,6 +32,10 @@ mysql_service() {
 	mysql_log SERVICE "165" "$@"
 }
 
+mysql_backup() {
+	mysql_log BACKUP "027" "$@"
+}
+
 ######
 # check user
 ######
@@ -186,7 +190,7 @@ docker_process_sql() {
 ft_temp_server_start() {
 	# mysql_note "Starting MariaDB database server: mariadb"
 	# service mariadb start > /dev/null
- 	mysqld_safe -uroot --skip-networking --default-time-zone=SYSTEM --socket="${SOCKET}" --wsrep_on=OFF --expire-logs-days=0 \
+ 	mysqld -uroot --skip-networking --default-time-zone=SYSTEM --socket="${SOCKET}" --wsrep_on=OFF --expire-logs-days=0 \
 		--loose-innodb_buffer_pool_load_at_startup=0 \
 		& declare -g MARIADB_PID 
 	MARIADB_PID=$!
@@ -213,7 +217,6 @@ ft_temp_server_start() {
 }
 
 ft_temp_server_stop() {
-	killall -15 mariadbd
 	kill "$MARIADB_PID"
 	wait "$MARIADB_PID"
 	mysql_destory "[PID $MARIADB_PID] temp server Clear"
@@ -238,10 +241,10 @@ ft_set_database() {
 	EOSQL
 	mysql_ready "if not exists create database $MYSQL_DATABASE"
 
-	if [ -f /conf/wordpress_backup.sql ] ; then
-		docker_process_sql wordpress < /conf/wordpress_backup.sql
-		mysql_ready "wordpress_backup /conf/wordpress_backup.sql "
-		rm  /conf/wordpress_backup.sql
+	if ! mariadb --socket="${SOCKET}" --database=wordpress -e "select * from wp_users where user_login='kyoulee'" ; then
+		mysql_backup "wordpress_backup /conf/wordpress_backup.sql start";
+		mariadb --socket="${SOCKET}" --database=wordpress < /conf/wordpress_backup.sql;
+		mysql_backup "wordpress_backup /conf/wordpress_backup.sql end";
 	fi
 
 	docker_process_sql <<-EOSQL

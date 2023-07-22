@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM debian:bookworm-slim as wordpress-kyoulee
+FROM debian:bullseye-slim as wordpress-kyoulee
 
 RUN set -eux \
 	&& apt-get update \
@@ -11,10 +11,10 @@ RUN set -eux \
 	&& apt-get install -y \
 	wget \
 	curl \
-	php8.2-fpm \
-	php8.2-mysqli \
-	php8.2-curl \
-    && ln -sf /dev/stderr /var/log/php8.2-fpm.log
+	php7.4-fpm \
+	php7.4-mysql \
+	php7.4-curl \
+    && ln -sf /dev/stderr /var/log/php7.4-fpm.log
 
 COPY ./conf /conf
 COPY ./tools /tools
@@ -24,7 +24,6 @@ VOLUME /var/www/wordpress
 WORKDIR /var/www/wordpress
 
 RUN chmod +x /tools/entrypoint.sh
-
 ENTRYPOINT [ "/tools/entrypoint.sh" ]
 
-CMD ["/usr/sbin/php-fpm8.2", "--nodaemonize"]
+CMD ["php-fpm7.4" ,"--pid", "/run/php/php7.4-fpm.pid", "--nodaemonize"]
