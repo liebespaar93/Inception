@@ -4,11 +4,11 @@ ROOTDIR = $(abspath $(dir $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))))
 NAMESERVER=$(ROOTDIR)/nameserver_checker
 DOCKER_APT_CHECKER=docker_apt_checker
 
-VOLUME_DIR=./srcs/volume
+VOLUME_DIR=/home/kyoulee/data
 VOLUME_MARIADB=$(VOLUME_DIR)/mariadb
 VOLUME_WORDPRESS=$(VOLUME_DIR)/wordpress
 
-ROOT	= kyoulee
+ROOT	= root
 WHOAMI	= $(shell whoami)
 
 all :
@@ -65,9 +65,11 @@ docker_uninstall :
 	for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do apt-get remove $pkg; done;
 
 docker-compose_install : set_docker_apt
-	curl -SL https://github.com/docker/compose/releases/download/v2.20.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose;
-	sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose;
-	chmod +x /usr/bin/docker-compose;
+	@if ! [ -f /usr/local/bin/docker-compose ]; then \
+	curl -SL https://github.com/docker/compose/releases/download/v2.20.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose; \
+	sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose; \
+	chmod +x /usr/bin/docker-compose; \
+	fi;
 	@echo "\033[38;5;047m[docker-compose_install]\033[0m: docker-compose install";
 
 

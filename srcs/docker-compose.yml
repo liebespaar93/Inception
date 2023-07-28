@@ -51,7 +51,7 @@ volumes:
     name: v-wordpress
     driver: local
     driver_opts:
-      device: ./volume/wordpress
+      device: ${VOLUME_DIR}/wordpress
       o: bind
       type: none
 
@@ -59,7 +59,7 @@ volumes:
     name: v-db
     driver: local
     driver_opts:
-      device: ./volume/mariadb
+      device: ${VOLUME_DIR}/mariadb
       o: bind
       type: none
 
